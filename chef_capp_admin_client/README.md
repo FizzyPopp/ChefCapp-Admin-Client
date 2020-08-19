@@ -1,4 +1,4 @@
-# chef_capp_admin
+# chef_capp_admin_client
 
 Chef Capp admin client
 

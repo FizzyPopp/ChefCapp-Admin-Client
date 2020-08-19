@@ -1,4 +1,4 @@
-name: chef_capp_admin
+name: chef_capp_admin_client
 description: Chef Capp admin client
 
 # The following line prevents the package from being accidentally published to
