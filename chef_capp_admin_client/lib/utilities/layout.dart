@@ -1,0 +1,1 @@
+const double xMargins = 16.0;
