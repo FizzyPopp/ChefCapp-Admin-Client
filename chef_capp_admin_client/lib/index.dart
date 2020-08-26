@@ -11,3 +11,5 @@ export 'package:chef_capp_admin_client/utilities/styles.dart';
 
 export 'package:chef_capp_admin_client/widgets/appbars.dart';
 export 'package:chef_capp_admin_client/widgets/sidebars.dart';
+
+export 'package:chef_capp_admin_client/services/auth_service.dart';
