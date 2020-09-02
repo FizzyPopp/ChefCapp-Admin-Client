@@ -443,7 +443,7 @@ class RecipeStep extends StatelessWidget {
                           ),
                           Expanded(
                             child: Consumer<RecipeStepController>(
-                              builder: (context, snapshot, _) {
+                              builder: (context, controller, _) {
                                 return TextField(
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -461,7 +461,7 @@ class RecipeStep extends StatelessWidget {
                           ),
                           Expanded(
                             child: Consumer<RecipeStepController>(
-                              builder: (context, snapshot, _) {
+                              builder: (context, controller, _) {
                                 return DropdownButtonFormField(
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -492,7 +492,7 @@ class RecipeStep extends StatelessWidget {
                     height: xMargins / 2,
                   ),
                   Consumer<RecipeStepController>(
-                    builder: (context, snapshot, _) {
+                    builder: (context, controller, _) {
                       return RaisedButton(
                         child: Text('Add Ingredient'),
                         onPressed: () {
@@ -506,7 +506,7 @@ class RecipeStep extends StatelessWidget {
                     height: xMargins / 2,
                   ),
                   Consumer<RecipeStepController>(
-                    builder: (context, snapshot, _) {
+                    builder: (context, controller, _) {
                       return TextField(
                         minLines: 3,
                         maxLines: 8,

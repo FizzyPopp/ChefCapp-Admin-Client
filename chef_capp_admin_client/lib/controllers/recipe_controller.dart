@@ -46,6 +46,9 @@ class RecipeController extends ChangeNotifier {
 }
 
 class IngredientController extends ChangeNotifier {
+
+  List<String> bulkUnitOptions = ["Bulk Unit", "A", "B"];
+
   void onEdit(BuildContext context) {
 
   }
