@@ -35,17 +35,13 @@ class RecipesHome extends StatelessWidget {
                               FlatButton(
                                 //padding: EdgeInsets.symmetric(horizontal: 0.0),
                                 child: Text('Recipes'),
-                                onPressed: () {
-
-                                },
+                                onPressed: () {},
                               )
                             ],
                           ),
                           RaisedButton(
                             child: Text('ADD NEW RECIPE'),
-                            onPressed: () {
-
-                            },
+                            onPressed: () {},
                           ),
                         ],
                       ),
@@ -58,19 +54,13 @@ class RecipesHome extends StatelessWidget {
                       child: DataTable(
                         columns: <DataColumn>[
                           DataColumn(
-                            label: Text(
-                                'ID'
-                            ),
+                            label: Text('ID'),
                           ),
                           DataColumn(
-                            label: Text(
-                                'Recipe Name'
-                            ),
+                            label: Text('Recipe Name'),
                           ),
                           DataColumn(
-                            label: Text(
-                                'Publishing Status'
-                            ),
+                            label: Text('Publishing Status'),
                           ),
                         ],
                         showCheckboxColumn: false,
@@ -110,7 +100,6 @@ class RecipesHome extends StatelessWidget {
 }
 
 class RecipePage extends StatelessWidget {
-
   final bool isNew;
 
   RecipePage(this.isNew);
@@ -165,44 +154,47 @@ class RecipePage extends StatelessWidget {
                               Row(
                                 children: [
                                   Consumer<RecipeController>(
-                                      builder: (context, controller, _) {
-                                    return FlatButton(
-                                      child: Text('CANCEL'),
-                                      onPressed: () {
-                                        print(
-                                            "cancel: go back to list of recipes page");
-                                        controller.onCancel(context);
-                                      },
-                                    );
-                                  }),
+                                    builder: (context, controller, _) {
+                                      return FlatButton(
+                                        child: Text('CANCEL'),
+                                        onPressed: () {
+                                          print(
+                                              "cancel: go back to list of recipes page");
+                                          controller.onCancel(context);
+                                        },
+                                      );
+                                    },
+                                  ),
                                   SizedBox(
                                     width: xMargins / 2,
                                   ),
                                   Consumer<RecipeController>(
-                                      builder: (context, controller, _) {
-                                    return OutlineButton(
-                                      child: Text('SAVE'),
-                                      onPressed: () {
-                                        print(
-                                            "save button pressed from recipe edit page");
-                                        controller.onSave(context);
-                                      },
-                                    );
-                                  }),
+                                    builder: (context, controller, _) {
+                                      return OutlineButton(
+                                        child: Text('SAVE'),
+                                        onPressed: () {
+                                          print(
+                                              "save button pressed from recipe edit page");
+                                          controller.onSave(context);
+                                        },
+                                      );
+                                    },
+                                  ),
                                   SizedBox(
                                     width: xMargins / 2,
                                   ),
                                   Consumer<RecipeController>(
-                                      builder: (context, controller, _) {
-                                    return RaisedButton(
-                                      child: Text('PUBLISH'),
-                                      onPressed: () {
-                                        print(
-                                            "publish button pressed from recipe edit page");
-                                        controller.onPublish(context);
-                                      },
-                                    );
-                                  }),
+                                    builder: (context, controller, _) {
+                                      return RaisedButton(
+                                        child: Text('PUBLISH'),
+                                        onPressed: () {
+                                          print(
+                                              "publish button pressed from recipe edit page");
+                                          controller.onPublish(context);
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ],
                               ),
                             ],
@@ -229,32 +221,34 @@ class RecipePage extends StatelessWidget {
                                   padding: EdgeInsets.symmetric(
                                       vertical: xMargins / 2),
                                   child: Consumer<RecipeController>(
-                                      builder: (context, controller, _) {
-                                    return TextField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        labelText: 'Recipe Name',
-                                      ),
-                                      onChanged: (newText) {
-                                        controller.recipeNameChanged(newText);
-                                      },
-                                    );
-                                  }),
+                                    builder: (context, controller, _) {
+                                      return TextField(
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Recipe Name',
+                                        ),
+                                        onChanged: (newText) {
+                                          controller.recipeNameChanged(newText);
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: xMargins / 2),
                                   child: Consumer<RecipeController>(
-                                      builder: (context, controller, _) {
-                                    return TextField(
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Yield',
-                                        ),
-                                        onChanged: (newText) {
-                                          controller.yieldChanged(newText);
-                                        });
-                                  }),
+                                    builder: (context, controller, _) {
+                                      return TextField(
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Yield',
+                                          ),
+                                          onChanged: (newText) {
+                                            controller.yieldChanged(newText);
+                                          });
+                                    },
+                                  ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
@@ -265,15 +259,15 @@ class RecipePage extends StatelessWidget {
                                         child: Consumer<RecipeController>(
                                             builder: (context, controller, _) {
                                           return TextField(
-                                            decoration: InputDecoration(
-                                              border: OutlineInputBorder(),
-                                              labelText: 'Prep time',
-                                              suffix: Text('mins'),
-                                            ),
-                                            onChanged: (newText) {
-                                              controller.prepTimeChanged(newText);
-                                            }
-                                          );
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'Prep time',
+                                                suffix: Text('mins'),
+                                              ),
+                                              onChanged: (newText) {
+                                                controller
+                                                    .prepTimeChanged(newText);
+                                              });
                                         }),
                                       ),
                                       SizedBox(
@@ -281,196 +275,51 @@ class RecipePage extends StatelessWidget {
                                       ),
                                       Expanded(
                                         child: Consumer<RecipeController>(
-                                        builder: (context, controller, _) {
-                                            return TextField(
+                                            builder: (context, controller, _) {
+                                          return TextField(
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(),
                                                 labelText: 'Cook time',
                                                 suffix: Text('mins'),
                                               ),
                                               onChanged: (newText) {
-                                                controller.cookTimeChanged(newText);
-                                              }
-                                            );
-                                          }),
+                                                controller
+                                                    .cookTimeChanged(newText);
+                                              });
+                                        }),
                                       ),
                                     ],
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                                  child: RaisedButton(
-                                    child: Text('Upload image'),
-                                    onPressed: () {
-
-                                    },
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                                  child: Text('INGREDIENTS'),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                                  child: Text('DIRECTIONS'),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: xMargins / 2),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(0, 12.0, 0, 0),
-                                        child: Text('Step 1'),
-                                      ),
-                                      SizedBox(
-                                        width: xMargins,
-                                      ),
-                                      PopupMenuButton(
-                                        itemBuilder: (BuildContext context) => <
-                                            PopupMenuEntry<
-                                                directionsPopupOptions>>[
-                                          const PopupMenuItem<
-                                              directionsPopupOptions>(
-                                            value:
-                                                directionsPopupOptions.firstOpt,
-                                            child: Text('Move up'),
-                                          ),
-                                          const PopupMenuItem<
-                                              directionsPopupOptions>(
-                                            value: directionsPopupOptions
-                                                .secondOpt,
-                                            child: Text('Move down'),
-                                          ),
-                                          const PopupMenuItem<
-                                              directionsPopupOptions>(
-                                            value: directionsPopupOptions
-                                                .secondOpt,
-                                            child: Text('Delete step'),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: xMargins,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: TextField(
-                                                        decoration:
-                                                            InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(),
-                                                          labelText:
-                                                              'Find an ingredient...',
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: xMargins,
-                                                    ),
-                                                    Expanded(
-                                                      child:
-                                                          DropdownButtonFormField(
-                                                        decoration:
-                                                            InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(),
-                                                        ),
-                                                        items: <
-                                                            DropdownMenuItem>[
-                                                          DropdownMenuItem(
-                                                            child: Text('Verbiage'),
-                                                          ),
-                                                          DropdownMenuItem(
-                                                            child: Text('Item'),
-                                                          ),
-                                                          DropdownMenuItem(
-                                                            child: Text('Item'),
-                                                          ),
-                                                        ],
-                                                        onChanged: (x) {},
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: xMargins,
-                                                    ),
-                                                    Expanded(
-                                                      child: TextField(
-                                                        decoration:
-                                                            InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(),
-                                                          labelText: 'Quantity',
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: xMargins,
-                                                    ),
-                                                    Expanded(
-                                                      child:
-                                                          DropdownButtonFormField(
-                                                        decoration:
-                                                            InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(),
-                                                        ),
-                                                        items: <
-                                                            DropdownMenuItem>[
-                                                          DropdownMenuItem(
-                                                            child: Text('Unit'),
-                                                          ),
-                                                          DropdownMenuItem(
-                                                            child: Text('Item'),
-                                                          ),
-                                                          DropdownMenuItem(
-                                                            child: Text('Item'),
-                                                          ),
-                                                        ],
-                                                        onChanged: (x) {},
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: xMargins / 2,
-                                            ),
-                                            RaisedButton(
-                                              child: Text('Add Ingredient'),
-                                              onPressed: () {
-                                                print("add ingredient button pressed");
-
-                                              },
-                                            ),
-                                            SizedBox(
-                                              height: xMargins / 2,
-                                            ),
-                                            TextField(
-                                              minLines: 3,
-                                              maxLines: 8,
-                                              decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  hintText:
-                                                      'Write your step directions here...'),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                  child: Consumer<RecipeController>(
+                                    builder: (context, controller, _) {
+                                      return RaisedButton(
+                                        child: Text('Upload image'),
+                                        onPressed: () {
+                                          controller.onUploadImage();
+                                        },
+                                      );
+                                    },
                                   ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: xMargins / 2),
+                                  child: Text('INGREDIENTS'),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: xMargins / 2),
+                                  child: Text('DIRECTIONS'),
+                                ),
+                                Consumer<RecipeController>(
+                                  builder: (context, controller, _) {
+                                    return RecipeStep(
+                                        controller.newStepController());
+                                  },
                                 ),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
@@ -495,5 +344,187 @@ class RecipePage extends StatelessWidget {
             ],
           ),
         ));
+  }
+}
+
+class RecipeStep extends StatelessWidget {
+  final RecipeStepController controller;
+
+  RecipeStep(this.controller);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 12.0, 0, 0),
+              child: Text('Step 1'),
+            ),
+            SizedBox(
+              width: xMargins,
+            ),
+            PopupMenuButton(
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<directionsPopupOptions>>[
+                const PopupMenuItem<directionsPopupOptions>(
+                  value: directionsPopupOptions.firstOpt,
+                  child: Text('Move up'),
+                ),
+                const PopupMenuItem<directionsPopupOptions>(
+                  value: directionsPopupOptions.secondOpt,
+                  child: Text('Move down'),
+                ),
+                const PopupMenuItem<directionsPopupOptions>(
+                  value: directionsPopupOptions.secondOpt,
+                  child: Text('Delete step'),
+                ),
+              ],
+            ),
+            SizedBox(
+              width: xMargins,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Consumer<RecipeStepController>(
+                              builder: (context, controller, _) {
+                                return TextField(
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Find an ingredient...',
+                                    ),
+                                    onChanged: (newText) {
+                                      controller.findIngredientChanged(newText);
+                                    });
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: xMargins,
+                          ),
+                          Expanded(
+                            child: Consumer<RecipeStepController>(
+                              builder: (context, controller, _) {
+                                return DropdownButtonFormField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  items: <DropdownMenuItem>[
+                                    DropdownMenuItem(
+                                      child: Text('Verbiage'),
+                                    ),
+                                    DropdownMenuItem(
+                                      child: Text('Item'),
+                                    ),
+                                    DropdownMenuItem(
+                                      child: Text('Item'),
+                                    ),
+                                  ],
+                                  onChanged: (x) {
+                                    controller.verbiageChanged(x);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: xMargins,
+                          ),
+                          Expanded(
+                            child: Consumer<RecipeStepController>(
+                              builder: (context, snapshot, _) {
+                                return TextField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Quantity',
+                                  ),
+                                  onChanged: (newText) {
+                                    controller.quantityChanged(newText);
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: xMargins,
+                          ),
+                          Expanded(
+                            child: Consumer<RecipeStepController>(
+                              builder: (context, snapshot, _) {
+                                return DropdownButtonFormField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  items: <DropdownMenuItem>[
+                                    DropdownMenuItem(
+                                      child: Text('Unit'),
+                                    ),
+                                    DropdownMenuItem(
+                                      child: Text('Item'),
+                                    ),
+                                    DropdownMenuItem(
+                                      child: Text('Item'),
+                                    ),
+                                  ],
+                                  onChanged: (x) {
+                                    controller.unitChanged(x);
+                                  },
+                                );
+                              }
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: xMargins / 2,
+                  ),
+                  Consumer<RecipeStepController>(
+                    builder: (context, snapshot, _) {
+                      return RaisedButton(
+                        child: Text('Add Ingredient'),
+                        onPressed: () {
+                          print("add ingredient button pressed");
+                          controller.addIngredient();
+                        },
+                      );
+                    }
+                  ),
+                  SizedBox(
+                    height: xMargins / 2,
+                  ),
+                  Consumer<RecipeStepController>(
+                    builder: (context, snapshot, _) {
+                      return TextField(
+                        minLines: 3,
+                        maxLines: 8,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Write your step directions here...'),
+                        onChanged: (newText) {
+                          controller.stepDirectionsChanged(newText);
+                        },
+                      );
+                    }
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
