@@ -11,3 +11,12 @@ export 'package:chef_capp_admin_client/utilities/styles.dart';
 
 export 'package:chef_capp_admin_client/widgets/appbars.dart';
 export 'package:chef_capp_admin_client/widgets/sidebars.dart';
+
+export 'package:chef_capp_admin_client/services/auth_service.dart';
+export 'package:chef_capp_admin_client/services/parent_service.dart';
+export 'package:chef_capp_admin_client/services/database_service.dart';
+
+export 'package:chef_capp_admin_client/models/id.dart';
+export 'package:chef_capp_admin_client/models/ingredient.dart';
+export 'package:chef_capp_admin_client/models/interfaces/equals_interface.dart';
+export 'package:chef_capp_admin_client/models/interfaces/ingredient_interface.dart';
