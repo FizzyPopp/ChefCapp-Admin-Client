@@ -237,6 +237,19 @@ class RecipePage extends StatelessWidget {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                              child: Text('COVER IMAGE'),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                              child: RaisedButton(
+                                child: Text('Upload image'),
+                                onPressed: () {
+
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: xMargins / 2),
                               child: Text('INGREDIENTS'),
                             ),
                             Padding(
