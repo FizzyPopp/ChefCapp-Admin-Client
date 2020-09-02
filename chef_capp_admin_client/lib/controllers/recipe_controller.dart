@@ -25,4 +25,10 @@ class RecipeController extends ChangeNotifier {
   void cookTimeChanged(String newText) {
 
   }
+  void onUploadImage() {
+
+  }
+  RecipeStepController newStepController() {
+    return null;
+  }
 }

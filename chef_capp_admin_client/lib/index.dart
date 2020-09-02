@@ -22,4 +22,5 @@ export 'package:chef_capp_admin_client/models/zero_ingredient.dart';
 export 'package:chef_capp_admin_client/models/interfaces/equals_interface.dart';
 export 'package:chef_capp_admin_client/models/interfaces/ingredient_interface.dart';
 
-export 'package:chef_capp_admin_client/controllers/recipe.dart';
+export 'package:chef_capp_admin_client/controllers/recipe_controller.dart';
+export 'package:chef_capp_admin_client/controllers/recipe_step_controller.dart';
