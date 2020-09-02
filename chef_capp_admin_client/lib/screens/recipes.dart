@@ -317,6 +317,8 @@ class RecipePage extends StatelessWidget {
                                 ),
                                 Consumer<RecipeController>(
                                   builder: (context, controller, _) {
+                                    // NO! going to have to rethink this section
+                                    // multiple recipe steps need to be displayed
                                     return RecipeStep(
                                         controller.newStepController());
                                   },
@@ -384,6 +386,9 @@ class RecipeStep extends StatelessWidget {
                   child: Text('Delete step'),
                 ),
               ],
+              onSelected: (x) {
+                print(x);
+              },
             ),
             SizedBox(
               width: xMargins,
