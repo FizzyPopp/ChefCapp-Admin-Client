@@ -39,7 +39,10 @@ class IngredientsHome extends StatelessWidget {
                           RaisedButton(
                             child: Text('ADD NEW INGREDIENT'),
                             onPressed: () {
-
+                              showDialog(
+                                context: context,
+                                builder: (_) => IngredientAdd(),
+                              );
                             },
                           ),
                         ],
@@ -77,10 +80,7 @@ class IngredientsHome extends StatelessWidget {
                               DataCell(Text('Diary')),
                             ],
                             onSelectChanged: (x) {
-                              Navigator.push(
-                                context,
-                                FadeRoute(page: RecipePage()),
-                              );
+
                             },
                           ),
                           DataRow(
@@ -99,6 +99,222 @@ class IngredientsHome extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class IngredientAdd extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(32.0),
+      child: Card(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: xMargins,
+              vertical: xMargins / 2,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: Text(
+                    'Add Ingredient',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Name (Singular)',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Tag',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Plural',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: <DropdownMenuItem>[
+                      DropdownMenuItem(
+                        child: Text('Category'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                    ],
+                    onChanged: (x) {
+
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: Text(
+                    'Unit Data for Ingredient',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: <DropdownMenuItem>[
+                      DropdownMenuItem(
+                        child: Text('SI unit'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                    ],
+                    onChanged: (x) {
+
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: <DropdownMenuItem>[
+                      DropdownMenuItem(
+                        child: Text('Cooking unit'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                    ],
+                    onChanged: (x) {
+
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: <DropdownMenuItem>[
+                      DropdownMenuItem(
+                        child: Text('Portion unit'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                    ],
+                    onChanged: (x) {
+
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: <DropdownMenuItem>[
+                      DropdownMenuItem(
+                        child: Text('Storage unit'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                    ],
+                    onChanged: (x) {
+
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: <DropdownMenuItem>[
+                      DropdownMenuItem(
+                        child: Text('Bulk unit'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Item'),
+                      ),
+                    ],
+                    onChanged: (x) {
+
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    RaisedButton(
+                      child: Text('Delete Ingredient'),
+                      onPressed: () {
+
+                      },
+                    ),
+                    SizedBox(width: xMargins,),
+                    RaisedButton(
+                      child: Text('Save'),
+                      onPressed: () {
+
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

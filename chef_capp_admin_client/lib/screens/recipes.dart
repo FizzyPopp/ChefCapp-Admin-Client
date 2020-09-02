@@ -295,7 +295,7 @@ class RecipePage extends StatelessWidget {
                                                     ),
                                                     items: <DropdownMenuItem>[
                                                       DropdownMenuItem(
-                                                        child: Text('Item'),
+                                                        child: Text('Verbiage'),
                                                       ),
                                                       DropdownMenuItem(
                                                         child: Text('Item'),
@@ -314,7 +314,7 @@ class RecipePage extends StatelessWidget {
                                                   child: TextField(
                                                     decoration: InputDecoration(
                                                       border: OutlineInputBorder(),
-                                                      labelText: 'Quantuty',
+                                                      labelText: 'Quantity',
                                                     ),
                                                   ),
                                                 ),
@@ -326,7 +326,7 @@ class RecipePage extends StatelessWidget {
                                                     ),
                                                     items: <DropdownMenuItem>[
                                                       DropdownMenuItem(
-                                                        child: Text('Item'),
+                                                        child: Text('Unit'),
                                                       ),
                                                       DropdownMenuItem(
                                                         child: Text('Item'),
@@ -348,21 +348,7 @@ class RecipePage extends StatelessWidget {
                                         RaisedButton(
                                           child: Text('Add Ingredient'),
                                           onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (_) => Padding(
-                                                padding: EdgeInsets.all(32.0),
-                                                child: Card(
-                                                  child: SingleChildScrollView(
-                                                    child: Column(
-                                                      children: [
-                                                        TextField()
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            );
+
                                           },
                                         ),
                                         SizedBox(height: xMargins / 2,),
