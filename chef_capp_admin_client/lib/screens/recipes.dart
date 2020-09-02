@@ -133,16 +133,17 @@ class RecipePage extends StatelessWidget {
                               Row(
                                 children: [
                                   Consumer<RecipeController>(
-                                      builder: (context, controller, _) {
-                                    return FlatButton(
-                                      child: Text('Recipes'),
-                                      onPressed: () {
-                                        print(
-                                            "breadcrumb: go back to list of recipes page");
-                                        controller.onRecipesCrumb(context);
-                                      },
-                                    );
-                                  }),
+                                    builder: (context, controller, _) {
+                                      return FlatButton(
+                                        child: Text('Recipes'),
+                                        onPressed: () {
+                                          print(
+                                              "breadcrumb: go back to list of recipes page");
+                                          controller.onRecipesCrumb(context);
+                                        },
+                                      );
+                                    },
+                                  ),
                                   Text('>'),
                                   FlatButton(
                                     child: Text('00001'),
