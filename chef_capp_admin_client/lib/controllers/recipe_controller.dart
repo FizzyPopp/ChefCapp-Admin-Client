@@ -26,3 +26,24 @@ class RecipeController extends ChangeNotifier {
 
   }
 }
+
+class IngredientController extends ChangeNotifier {
+  void onEdit(BuildContext context) {
+
+  }
+  void onDelete(BuildContext context) {
+
+  }
+  void onSave(BuildContext context) {
+
+  }
+  void ingredientNameChanged(String newText) {
+
+  }
+  void ingredientTagChanged(String newText) {
+
+  }
+  void ingredientPluralChanged(String newText) {
+
+  }
+}
