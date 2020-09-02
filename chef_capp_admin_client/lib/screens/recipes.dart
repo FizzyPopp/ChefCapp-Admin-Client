@@ -296,14 +296,21 @@ class RecipePage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
+                                adding(
+                                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                                  child: RaisedButton(
+                                    child: Text('Upload image'),
+                                    onPressed: () {
+
+                                    },
+                                  ),
+                                ),
                                 Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: xMargins / 2),
+                                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
                                   child: Text('INGREDIENTS'),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: xMargins / 2),
+                                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
                                   child: Text('DIRECTIONS'),
                                 ),
                                 Padding(
@@ -382,7 +389,7 @@ class RecipePage extends StatelessWidget {
                                                         items: <
                                                             DropdownMenuItem>[
                                                           DropdownMenuItem(
-                                                            child: Text('Item'),
+                                                            child: Text('Verbiage'),
                                                           ),
                                                           DropdownMenuItem(
                                                             child: Text('Item'),
@@ -443,22 +450,7 @@ class RecipePage extends StatelessWidget {
                                             RaisedButton(
                                               child: Text('Add Ingredient'),
                                               onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (_) => Padding(
-                                                    padding:
-                                                        EdgeInsets.all(32.0),
-                                                    child: Card(
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        child: Column(
-                                                          children: [
-                                                            TextField()
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
+                                                print("add ingredient button pressed");
                                                 );
                                               },
                                             ),
