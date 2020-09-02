@@ -296,7 +296,7 @@ class RecipePage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                adding(
+                                Padding(
                                   padding: EdgeInsets.symmetric(vertical: xMargins / 2),
                                   child: RaisedButton(
                                     child: Text('Upload image'),
@@ -451,7 +451,7 @@ class RecipePage extends StatelessWidget {
                                               child: Text('Add Ingredient'),
                                               onPressed: () {
                                                 print("add ingredient button pressed");
-                                                );
+
                                               },
                                             ),
                                             SizedBox(
