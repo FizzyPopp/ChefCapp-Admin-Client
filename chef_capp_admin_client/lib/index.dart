@@ -18,7 +18,7 @@ export 'package:chef_capp_admin_client/services/database_service.dart';
 
 export 'package:chef_capp_admin_client/models/id_model.dart';
 export 'package:chef_capp_admin_client/models/step_ingredient_model.dart';
-export 'package:chef_capp_admin_client/models/zero_ingredient_model.dart';
+export 'package:chef_capp_admin_client/models/db_ingredient_model.dart';
 export 'package:chef_capp_admin_client/models/recipe_step_model.dart';
 export 'package:chef_capp_admin_client/models/recipe_model.dart';
 export 'package:chef_capp_admin_client/models/interfaces/equals_interface.dart';

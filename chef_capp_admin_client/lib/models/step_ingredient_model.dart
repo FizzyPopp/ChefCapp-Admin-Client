@@ -19,7 +19,7 @@ class StepIngredientModel implements EqualsInterface, IngredientInterface {
         this._category = category,
         this._range = [quantity, quantity];
 
-  StepIngredientModel.fromZero(ZeroIngredientModel zi, double quantity) :
+  StepIngredientModel.fromZero(DBIngredientModel zi, double quantity) :
       this._id = zi.id,
       this._name = zi.name,
       this._plural = zi.plural,

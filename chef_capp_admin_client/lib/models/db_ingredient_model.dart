@@ -1,6 +1,6 @@
 import 'package:chef_capp_admin_client/index.dart';
 
-class ZeroIngredientModel implements EqualsInterface, IngredientInterface {
+class DBIngredientModel implements EqualsInterface, IngredientInterface {
   // may need a heck of a lot more fields to fully describe an ingredient
   final IDModel _id;
   final String _name;
@@ -10,7 +10,7 @@ class ZeroIngredientModel implements EqualsInterface, IngredientInterface {
   final String _category;
   final List<double> _range;
 
-  ZeroIngredientModel(IDModel id, String name, String plural, double quantity, Map<String, dynamic> unit, String category) :
+  DBIngredientModel(IDModel id, String name, String plural, double quantity, Map<String, dynamic> unit, String category) :
         this._id = id,
         this._name = name,
         this._plural = plural,
@@ -34,7 +34,7 @@ class ZeroIngredientModel implements EqualsInterface, IngredientInterface {
   List<double> get range => [..._range];
 
   bool equals(var other) {
-    if (other is! ZeroIngredientModel) return false;
+    if (other is! DBIngredientModel) return false;
     return this.id == other.id;
   }
 
@@ -42,7 +42,7 @@ class ZeroIngredientModel implements EqualsInterface, IngredientInterface {
     return "0$_unit";
   }
 
-  static ZeroIngredientModel fromDB(data) {
+  static DBIngredientModel fromDB(data) {
     // sanitize
     if (data["id"] == null || data["id"] == "") {
       throw ("bad id");
@@ -65,6 +65,6 @@ class ZeroIngredientModel implements EqualsInterface, IngredientInterface {
     // TODO: get category
 
     // return
-    return ZeroIngredientModel(IDModel(data["id"]), name, plural, 0, unit, "A Category");
+    return DBIngredientModel(IDModel(data["id"]), name, plural, 0, unit, "A Category");
   }
 }
