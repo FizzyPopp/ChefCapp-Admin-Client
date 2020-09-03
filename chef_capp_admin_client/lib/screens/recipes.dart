@@ -100,14 +100,15 @@ class RecipesHome extends StatelessWidget {
 }
 
 class RecipePage extends StatelessWidget {
+  final RecipeController controller;
   final bool isNew;
 
-  RecipePage(this.isNew);
+  RecipePage(this.isNew) : controller = RecipeController();
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<RecipeController>(
-        create: (_) => RecipeController(),
+    return ChangeNotifierProvider.value(
+        value: controller,
         child: Scaffold(
           appBar: MainAppBar(),
           body: Row(
@@ -315,14 +316,7 @@ class RecipePage extends StatelessWidget {
                                       vertical: xMargins / 2),
                                   child: Text('DIRECTIONS'),
                                 ),
-                                Consumer<RecipeController>(
-                                  builder: (context, controller, _) {
-                                    // NO! going to have to rethink this section
-                                    // multiple recipe steps need to be displayed
-                                    return RecipeStep(
-                                        controller.newStepController());
-                                  },
-                                ),
+                                ...getSteps(),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       vertical: xMargins / 2),
@@ -346,6 +340,19 @@ class RecipePage extends StatelessWidget {
             ],
           ),
         ));
+  }
+
+  List<Widget> getSteps() {
+    List<Widget> out = [];
+    for (RecipeStepController rsc in controller.stepControllers) {
+      var tmp = Consumer<RecipeController>(
+        builder: (context, controller, _) {
+          return RecipeStep(rsc);
+        },
+      );
+      out.add(tmp);
+    }
+    return out;
   }
 }
 

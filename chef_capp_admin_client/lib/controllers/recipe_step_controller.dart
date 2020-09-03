@@ -5,9 +5,18 @@ class RecipeStepController extends ChangeNotifier {
   String _directions, _newIngredient, _newVerbiage, _newQuantity, _newUnit;
   List<RecipeStepIngredientController> _ingredientControllers;
 
-  RecipeStepController(this._step) {
+  RecipeStepController(this._step, this._directions, List<StepIngredientModel> ingredients) {
     _ingredientControllers = [];
   }
+
+  RecipeStepController.fromModel(RecipeStepModel rs) {
+    _step = rs.step;
+    _directions = rs.directions;
+    _ingredientControllers = rs.ingredients.map((m) => RecipeStepIngredientController.fromModel(m)).toList();
+  }
+
+  int get step => _step;
+  String get directions => _directions;
 
   void findIngredientChanged(String newText) {
     _newIngredient = newText;

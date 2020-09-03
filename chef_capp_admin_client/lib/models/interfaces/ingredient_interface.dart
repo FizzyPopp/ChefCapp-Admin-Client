@@ -1,7 +1,7 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 abstract class IngredientInterface {
-  ID get id;
+  IDModel get id;
   String get name;
   String get plural;
   double get quantity;

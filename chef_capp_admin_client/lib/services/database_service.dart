@@ -35,7 +35,7 @@ class DatabaseService {
     print("got ingredients");
   }
 
-  Future<List<ZeroIngredient>> getIngredients() async {
+  Future<List<ZeroIngredientModel>> getIngredients() async {
     if (_fireState != FireState.Initialized) {
       // throw something?
       // try to initialize?
@@ -44,14 +44,14 @@ class DatabaseService {
 
     QuerySnapshot qSnapshot = await FirebaseFirestore.instance.collection('ingredients').get();
 
-    List<ZeroIngredient> out = [];
+    List<ZeroIngredientModel> out = [];
     for (DocumentSnapshot ds in qSnapshot.docs) {
       if (ds.id != "metadata") {
-        out.add(ZeroIngredient.fromDB(ds.data()));
+        out.add(ZeroIngredientModel.fromDB(ds.data()));
       }
     }
 
-    for (ZeroIngredient zi in out) {
+    for (ZeroIngredientModel zi in out) {
       print(zi);
     }
 

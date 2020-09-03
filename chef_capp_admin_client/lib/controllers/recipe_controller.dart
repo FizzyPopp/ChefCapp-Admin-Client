@@ -2,11 +2,16 @@ import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeController extends ChangeNotifier {
   String _recipeName, _yield, _prepTime, _cookTime;
-  List<RecipeStepController> stepControllers;
+  List<RecipeStepController> _stepControllers;
 
   RecipeController() {
-    stepControllers = [];
+    _stepControllers = [];
+
+    // for testing
+
   }
+
+  List<RecipeStepController> get stepControllers => [..._stepControllers];
 
   void onRecipesCrumb(BuildContext context) {
     Navigator.pop(context);
@@ -45,8 +50,8 @@ class RecipeController extends ChangeNotifier {
   }
 
   RecipeStepController newStepController() {
-    RecipeStepController out = RecipeStepController(stepControllers.length);
-    stepControllers.add(out);
+    RecipeStepController out = RecipeStepController(_stepControllers.length, "", null);
+    _stepControllers.add(out);
     return out;
   }
 }

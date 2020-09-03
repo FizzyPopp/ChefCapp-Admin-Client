@@ -1,8 +1,8 @@
 import 'package:chef_capp_admin_client/index.dart';
 
-class Ingredient implements EqualsInterface, IngredientInterface {
+class StepIngredientModel implements EqualsInterface, IngredientInterface {
   // may need a heck of a lot more fields to fully describe an ingredient
-  final ID _id;
+  final IDModel _id;
   final String _name;
   final String _plural;
   final double _quantity;
@@ -10,7 +10,7 @@ class Ingredient implements EqualsInterface, IngredientInterface {
   final String _category;
   final List<double> _range;
 
-  Ingredient(ID id, String name, String plural, double quantity, String unit, String category) :
+  StepIngredientModel(IDModel id, String name, String plural, double quantity, String unit, String category) :
         this._id = id,
         this._name = name,
         this._plural = plural,
@@ -19,7 +19,7 @@ class Ingredient implements EqualsInterface, IngredientInterface {
         this._category = category,
         this._range = [quantity, quantity];
 
-  Ingredient.fromZero(ZeroIngredient zi, double quantity) :
+  StepIngredientModel.fromZero(ZeroIngredientModel zi, double quantity) :
       this._id = zi.id,
       this._name = zi.name,
       this._plural = zi.plural,
@@ -28,7 +28,7 @@ class Ingredient implements EqualsInterface, IngredientInterface {
       this._category = zi.category,
       this._range = [quantity, quantity];
 
-  ID get id => _id;
+  IDModel get id => _id;
 
   String get name => _name;
 
@@ -43,7 +43,7 @@ class Ingredient implements EqualsInterface, IngredientInterface {
   List<double> get range => [..._range];
 
   bool equals(var other) {
-    if (other is! Ingredient) return false;
+    if (other is! StepIngredientModel) return false;
     return this.id == other.id;
   }
 
@@ -124,7 +124,7 @@ class Ingredient implements EqualsInterface, IngredientInterface {
     }
   }
 
-  static Ingredient fromDB(data) {
+  static StepIngredientModel fromDB(data) {
     print("check 1");
 
     // sanitize
@@ -157,22 +157,22 @@ class Ingredient implements EqualsInterface, IngredientInterface {
     // TODO: get category
 
     // return
-    return Ingredient(ID(data["id"]), name, plural, quantity, unit, "A Category");
+    return StepIngredientModel(IDModel(data["id"]), name, plural, quantity, unit, "A Category");
   }
 
-  static List<Ingredient> listFromDB(data) {
+  static List<StepIngredientModel> listFromDB(data) {
     if (data.isEmpty) {
       return [];
     }
 
     List<String> keys;
-    List<Ingredient> unsortedIngredients = [];
+    List<StepIngredientModel> unsortedIngredients = [];
     // get keys and parse ingredients
     data.forEach((k, v) {
       if (k == "keys") {
         keys = List<String>.from(v);
       } else {
-        unsortedIngredients.add(Ingredient.fromDB(v));
+        unsortedIngredients.add(StepIngredientModel.fromDB(v));
       }
     });
     // sanitize
@@ -180,7 +180,7 @@ class Ingredient implements EqualsInterface, IngredientInterface {
       throw("no keys for ingredients");
     }
     // order ingredients
-    List<Ingredient> ingredients = [];
+    List<StepIngredientModel> ingredients = [];
     for (int k = 0; k < keys.length; k++) {
       for (int i = 0; i < unsortedIngredients.length; i++) {
         if (unsortedIngredients[i].id.toString() == keys[k]) {
