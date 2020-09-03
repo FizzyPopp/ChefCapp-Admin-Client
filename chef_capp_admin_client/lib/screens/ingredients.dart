@@ -190,24 +190,19 @@ class IngredientAdd extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      items: <DropdownMenuItem>[
-                        DropdownMenuItem(
-                          child: Text('Category'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                      ],
-                      onChanged: (x) {
-
-                      },
+                    child: Consumer<IngredientController>(
+                      builder: (context, controller, _) {
+                        return DropdownButtonFormField(
+                          value: 0,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                          ),
+                          items: toDropMenuItems(controller.categoryOptions),
+                          onChanged: (x) {
+                            print(x);
+                          },
+                        );
+                      }
                     ),
                   ),
                   Padding(
@@ -219,90 +214,69 @@ class IngredientAdd extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      items: <DropdownMenuItem>[
-                        DropdownMenuItem(
-                          child: Text('SI unit'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                      ],
-                      onChanged: (x) {
-
-                      },
+                    child: Consumer<IngredientController>(
+                      builder: (context, controller, _) {
+                        return DropdownButtonFormField(
+                          value: 0,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                          ),
+                          items: toDropMenuItems(controller.siUnitOptions),
+                          onChanged: (x) {
+                            print(x);
+                          },
+                        );
+                      }
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      items: <DropdownMenuItem>[
-                        DropdownMenuItem(
-                          child: Text('Cooking unit'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                      ],
-                      onChanged: (x) {
-
-                      },
+                    child: Consumer<IngredientController>(
+                        builder: (context, controller, _) {
+                          return DropdownButtonFormField(
+                            value: 0,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                            ),
+                            items: toDropMenuItems(controller.cookingUnitOptions),
+                            onChanged: (x) {
+                              print(x);
+                            },
+                          );
+                        }
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      items: <DropdownMenuItem>[
-                        DropdownMenuItem(
-                          child: Text('Portion unit'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                      ],
-                      onChanged: (x) {
-
-                      },
+                    child: Consumer<IngredientController>(
+                        builder: (context, controller, _) {
+                          return DropdownButtonFormField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                            ),
+                            items: toDropMenuItems(controller.portionUnitOptions),
+                            onChanged: (x) {
+                              print(x);
+                            },
+                          );
+                        }
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      items: <DropdownMenuItem>[
-                        DropdownMenuItem(
-                          child: Text('Storage unit'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                      ],
-                      onChanged: (x) {
-
-                      },
+                    child: Consumer<IngredientController>(
+                        builder: (context, controller, _) {
+                          return DropdownButtonFormField(
+                            value: 0,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                            ),
+                            items: toDropMenuItems(controller.storageUnitOptions),
+                            onChanged: (x) {
+                              print(x);
+                            },
+                          );
+                        }
                     ),
                   ),
                   Padding(
