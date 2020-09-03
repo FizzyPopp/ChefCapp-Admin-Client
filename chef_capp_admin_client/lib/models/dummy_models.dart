@@ -23,7 +23,9 @@ class DummyModels {
   static RecipeStepModel recipeStep(int step) {
     IDModel id = DummyModels.id();
     List<StepIngredientModel> steps = [
-
+      DummyModels.stepIngredient(),
+      DummyModels.stepIngredient(),
+      DummyModels.stepIngredient(),
     ];
     return RecipeStepModel("directions $id", step, []);
   }
@@ -34,6 +36,7 @@ class DummyModels {
   }
 
   static ZeroIngredientModel zeroIngredient() {
-    return null;
+    IDModel id = DummyModels.id();
+    return ZeroIngredientModel(id, "name $id", "plural $id", double.parse(id.hash), {}, "category $id");
   }
 }
