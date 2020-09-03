@@ -53,6 +53,11 @@ class RecipeController extends ChangeNotifier {
 
 class IngredientController extends ChangeNotifier {
 
+  List<String> categoryOptions = ["Bulk Unit", "A", "B"];
+  List<String> siUnitOptions = ["Bulk Unit", "A", "B"];
+  List<String> cookingUnitOptions = ["Bulk Unit", "A", "B"];
+  List<String> portionUnitOptions = ["Bulk Unit", "A", "B"];
+  List<String> storageUnitOptions = ["Bulk Unit", "A", "B"];
   List<String> bulkUnitOptions = ["Bulk Unit", "A", "B"];
 
   void onEdit(BuildContext context) {
