@@ -307,23 +307,18 @@ class IngredientAdd extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                    child: DropdownButtonFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
-                      items: <DropdownMenuItem>[
-                        DropdownMenuItem(
-                          child: Text('Bulk unit'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                      ],
-                      onChanged: (x) {
-
+                    child: Consumer<IngredientController>(
+                      builder: (context, controller, _) {
+                        return DropdownButtonFormField(
+                          value: 0,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                          ),
+                          items: toDropMenuItems(controller.bulkUnitOptions),
+                          onChanged: (x) {
+                            print(x);
+                          },
+                        );
                       },
                     ),
                   ),
@@ -360,5 +355,16 @@ class IngredientAdd extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<DropdownMenuItem<dynamic>> toDropMenuItems(List<String> options) {
+    List<DropdownMenuItem<dynamic>> out = [];
+    for (int i = 0; i < options.length; i++) {
+      out.add(DropdownMenuItem(
+        value: i,
+        child: Text(options[i]),
+      ));
+    }
+    return out;
   }
 }

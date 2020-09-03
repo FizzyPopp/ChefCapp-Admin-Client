@@ -317,6 +317,8 @@ class RecipePage extends StatelessWidget {
                                 ),
                                 Consumer<RecipeController>(
                                   builder: (context, controller, _) {
+                                    // NO! going to have to rethink this section
+                                    // multiple recipe steps need to be displayed
                                     return RecipeStep(
                                         controller.newStepController());
                                   },
@@ -384,6 +386,9 @@ class RecipeStep extends StatelessWidget {
                   child: Text('Delete step'),
                 ),
               ],
+              onSelected: (x) {
+                print(x);
+              },
             ),
             SizedBox(
               width: xMargins,
@@ -443,7 +448,7 @@ class RecipeStep extends StatelessWidget {
                           ),
                           Expanded(
                             child: Consumer<RecipeStepController>(
-                              builder: (context, snapshot, _) {
+                              builder: (context, controller, _) {
                                 return TextField(
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -461,7 +466,7 @@ class RecipeStep extends StatelessWidget {
                           ),
                           Expanded(
                             child: Consumer<RecipeStepController>(
-                              builder: (context, snapshot, _) {
+                              builder: (context, controller, _) {
                                 return DropdownButtonFormField(
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -492,7 +497,7 @@ class RecipeStep extends StatelessWidget {
                     height: xMargins / 2,
                   ),
                   Consumer<RecipeStepController>(
-                    builder: (context, snapshot, _) {
+                    builder: (context, controller, _) {
                       return RaisedButton(
                         child: Text('Add Ingredient'),
                         onPressed: () {
@@ -506,7 +511,7 @@ class RecipeStep extends StatelessWidget {
                     height: xMargins / 2,
                   ),
                   Consumer<RecipeStepController>(
-                    builder: (context, snapshot, _) {
+                    builder: (context, controller, _) {
                       return TextField(
                         minLines: 3,
                         maxLines: 8,

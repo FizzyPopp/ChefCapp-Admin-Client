@@ -24,3 +24,4 @@ export 'package:chef_capp_admin_client/models/interfaces/ingredient_interface.da
 
 export 'package:chef_capp_admin_client/controllers/recipe_controller.dart';
 export 'package:chef_capp_admin_client/controllers/recipe_step_controller.dart';
+export 'package:chef_capp_admin_client/controllers/recipe_step_ingredient_controller.dart';
