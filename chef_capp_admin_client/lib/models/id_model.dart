@@ -1,9 +1,9 @@
 import 'package:chef_capp_admin_client/index.dart';
 
-class ID implements EqualsInterface {
+class IDModel implements EqualsInterface {
   final String _hash;
 
-  ID(String hash) :
+  IDModel(String hash) :
         this._hash = hash;
 
   String get hash => _hash;
@@ -12,7 +12,7 @@ class ID implements EqualsInterface {
   String toString() => _hash;
 
   bool equals(var other) {
-    if (other is! ID) return false;
+    if (other is! IDModel) return false;
     return other.hash == this.hash;
   }
 }
