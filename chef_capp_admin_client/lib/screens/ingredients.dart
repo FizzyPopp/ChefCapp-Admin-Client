@@ -215,6 +215,7 @@ class IngredientAdd extends StatelessWidget {
                         value: 0,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
+                          labelText: 'Categories',
                         ),
                         items: toDropMenuItems(controller.categoryOptions),
                         onChanged: (int x) {
