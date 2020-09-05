@@ -4,11 +4,20 @@ class RecipeController extends ChangeNotifier {
   String _recipeName, _yield, _prepTime, _cookTime;
   List<RecipeStepController> _stepControllers;
 
-  RecipeController() {
+  RecipeController(RecipeModel model) {
+    _recipeName = model.title;
+    _yield = model.yield;
+    _prepTime = model.prepTime;
+    _cookTime = model.cookTime;
+    _stepControllers = model.steps.map((s) => RecipeStepController(s)).toList();
+  }
+
+  RecipeController.empty() {
+    _recipeName = "";
+    _yield = "";
+    _prepTime = "";
+    _cookTime = "";
     _stepControllers = [];
-
-    // for testing
-
   }
 
   List<RecipeStepController> get stepControllers => [..._stepControllers];
@@ -50,7 +59,7 @@ class RecipeController extends ChangeNotifier {
   }
 
   RecipeStepController newStepController() {
-    RecipeStepController out = RecipeStepController(_stepControllers.length, "", null);
+    RecipeStepController out = RecipeStepController.empty(_stepControllers.length);
     _stepControllers.add(out);
     return out;
   }

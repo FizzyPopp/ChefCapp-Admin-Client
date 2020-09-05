@@ -12,6 +12,18 @@ class RecipeStepIngredientController extends ChangeNotifier {
     _unit = ingredient.unit.toString();
   }
 
+  double _parseQuantity() {
+    return (double.tryParse(_quantity) ?? 0);
+  }
+
+  StepIngredientModel toModel() {
+    if (_parseQuantity() == 0) {
+      throw("bad quantity");
+    } else {
+      return StepIngredientModel(null, name, _verbiage, _parseQuantity(), _unit);
+    }
+  }
+
   String get verbiage => _verbiage;
   String get quantity => _quantity;
   String get unit => _unit;

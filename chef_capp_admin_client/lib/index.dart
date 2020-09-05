@@ -22,9 +22,10 @@ export 'package:chef_capp_admin_client/models/db_ingredient_model.dart';
 export 'package:chef_capp_admin_client/models/recipe_step_model.dart';
 export 'package:chef_capp_admin_client/models/recipe_model.dart';
 export 'package:chef_capp_admin_client/models/interfaces/equals_interface.dart';
-export 'package:chef_capp_admin_client/models/interfaces/ingredient_interface.dart';
+export 'package:chef_capp_admin_client/models/dummy_models.dart';
 
-export 'package:chef_capp_admin_client/controllers/ingredient_controller.dart';
+export 'package:chef_capp_admin_client/controllers/db_ingredient_controller.dart';
 export 'package:chef_capp_admin_client/controllers/recipe_controller.dart';
 export 'package:chef_capp_admin_client/controllers/recipe_step_controller.dart';
 export 'package:chef_capp_admin_client/controllers/recipe_step_ingredient_controller.dart';
+export 'package:chef_capp_admin_client/controllers/db_ingredient_list_controller.dart';

@@ -103,7 +103,7 @@ class RecipePage extends StatelessWidget {
   final RecipeController controller;
   final bool isNew;
 
-  RecipePage(this.isNew) : controller = RecipeController();
+  RecipePage(this.isNew) : controller = RecipeController.empty();
 
   @override
   Widget build(BuildContext context) {
