@@ -21,7 +21,6 @@ class DBIngredientListController extends ChangeNotifier {
   }
 
   void onEdit(BuildContext context, DBIngredientModel m) {
-    print("yessir");
     showDialog(
       context: context,
       builder: (_) => IngredientAdd(DBIngredientController(m, this)),

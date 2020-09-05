@@ -1,24 +1,33 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeController extends ChangeNotifier {
+  final RecipeListController parent;
   String _recipeName, _yield, _prepTime, _cookTime;
   List<RecipeStepController> _stepControllers;
 
-  RecipeController(RecipeModel model) {
+  RecipeController(RecipeModel model, this.parent) {
     _recipeName = model.title;
-    _yield = model.yield;
-    _prepTime = model.prepTime;
-    _cookTime = model.cookTime;
-    _stepControllers = model.steps.map((s) => RecipeStepController(s)).toList();
+    _yield = model.yield.toString();
+    _prepTime = model.prepTime.toString();
+    _cookTime = model.cookTime.toString();
+    _stepControllers = model.steps.map((s) => RecipeStepController(s, this)).toList();
   }
 
-  RecipeController.empty() {
+  RecipeController.empty(this.parent) {
     _recipeName = "";
     _yield = "";
     _prepTime = "";
     _cookTime = "";
     _stepControllers = [];
   }
+
+  String get recipeName => _recipeName;
+
+  String get yield => _yield;
+
+  String get prepTime => _prepTime;
+
+  String get cookTime => _cookTime;
 
   List<RecipeStepController> get stepControllers => [..._stepControllers];
 
@@ -59,8 +68,20 @@ class RecipeController extends ChangeNotifier {
   }
 
   RecipeStepController newStepController() {
-    RecipeStepController out = RecipeStepController.empty(_stepControllers.length);
+    RecipeStepController out = RecipeStepController.empty(_stepControllers.length, this);
     _stepControllers.add(out);
     return out;
+  }
+
+  bool moveStepUp(RecipeStepController step) {
+
+  }
+
+  bool moveStepDown(RecipeStepController step) {
+
+  }
+
+  bool deleteStep(RecipeStepController step) {
+
   }
 }

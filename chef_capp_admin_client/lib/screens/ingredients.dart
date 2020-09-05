@@ -38,14 +38,15 @@ class IngredientsHome extends StatelessWidget {
                               ],
                             ),
                             Consumer<DBIngredientListController>(
-                                builder: (context, controller, _) {
-                              return RaisedButton(
-                                child: Text('ADD NEW INGREDIENT'),
-                                onPressed: () {
-                                  controller.onAddNew(context);
-                                },
-                              );
-                            }),
+                              builder: (context, controller, _) {
+                                return RaisedButton(
+                                  child: Text('ADD NEW INGREDIENT'),
+                                  onPressed: () {
+                                    controller.onAddNew(context);
+                                  },
+                                );
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -56,21 +57,21 @@ class IngredientsHome extends StatelessWidget {
                         ),
                         child: Consumer<DBIngredientListController>(
                             builder: (context, controller, _) {
-                              return DataTable(
-                                  columns: <DataColumn>[
-                                    DataColumn(
-                                      label: Text('ID'),
-                                    ),
-                                    DataColumn(
-                                      label: Text('Name (Singular)'),
-                                    ),
-                                    DataColumn(
-                                      label: Text('Category'),
-                                    ),
-                                  ],
-                                  showCheckboxColumn: false,
-                                rows: buildList(context, controller),
-                              );
+                          return DataTable(
+                            columns: <DataColumn>[
+                              DataColumn(
+                                label: Text('ID'),
+                              ),
+                              DataColumn(
+                                label: Text('Name (Singular)'),
+                              ),
+                              DataColumn(
+                                label: Text('Category'),
+                              ),
+                            ],
+                            showCheckboxColumn: false,
+                            rows: buildList(context, controller),
+                          );
                         }),
                       ),
                     ],
@@ -84,7 +85,8 @@ class IngredientsHome extends StatelessWidget {
     );
   }
 
-  List<DataRow> buildList(BuildContext context, DBIngredientListController controller) {
+  List<DataRow> buildList(
+      BuildContext context, DBIngredientListController controller) {
     return controller.ingredients.map((m) {
       return DataRow(
         cells: <DataCell>[
