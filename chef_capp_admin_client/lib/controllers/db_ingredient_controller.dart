@@ -5,6 +5,7 @@ class DBIngredientController extends ChangeNotifier {
   bool _volume;
   String _name, _tag, _plural, _category, _cookingUnit, _portionUnit;
 
+  // pull from collection "ingredients" -> doc "metadata" -> "categories"
   List<String> categoryOptions = [
     "bread and bakery",
     "produce",
@@ -53,7 +54,6 @@ class DBIngredientController extends ChangeNotifier {
 
   int get portionUnit => _indexOf(portionUnitOptions, _portionUnit);
 
-
   int _indexOf(List<String> l, String s) {
     if (l.contains(s)) {
       return l.indexOf(s);
@@ -63,9 +63,6 @@ class DBIngredientController extends ChangeNotifier {
   }
 
   DBIngredientController.empty(this.parent);
-
-  // pull from collection "ingredients" -> doc "metadata" -> "categories"
-
 
   void onDelete(BuildContext context) {
 

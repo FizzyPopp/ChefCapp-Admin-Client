@@ -3,107 +3,114 @@ import 'dart:html';
 import 'package:chef_capp_admin_client/index.dart';
 import 'package:provider/provider.dart';
 
-enum directionsPopupOptions { firstOpt, secondOpt, thirdOpt, fourthOpt }
+enum stepPopupOptions { firstOpt, secondOpt, thirdOpt, fourthOpt }
 
 class RecipesHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MainAppBar(),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MainSideBar(),
-          Expanded(
-            child: Container(
-              color: Colors.grey[200],
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: xMargins),
-                child: ListView(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: xMargins,
-                        //vertical: xMargins / 2,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ChangeNotifierProvider<RecipeListController>(
+        create: (_) => RecipeListController(),
+        builder: (context, snapshot) {
+          return Scaffold(
+            appBar: MainAppBar(),
+            body: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MainSideBar(),
+                Expanded(
+                  child: Container(
+                    color: Colors.grey[200],
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: xMargins),
+                      child: ListView(
                         children: [
-                          Row(
-                            children: [
-                              FlatButton(
-                                //padding: EdgeInsets.symmetric(horizontal: 0.0),
-                                child: Text('Recipes'),
-                                onPressed: () {},
-                              )
-                            ],
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: xMargins,
+                              //vertical: xMargins / 2,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    FlatButton(
+                                      //padding: EdgeInsets.symmetric(horizontal: 0.0),
+                                      child: Text('Recipes'),
+                                      onPressed: () {},
+                                    )
+                                  ],
+                                ),
+                                Consumer<RecipeListController>(
+                                  builder: (context, controller, _) {
+                                    return RaisedButton(
+                                      child: Text('ADD NEW RECIPE'),
+                                      onPressed: () {
+                                        controller.onAddNew(context);
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                          RaisedButton(
-                            child: Text('ADD NEW RECIPE'),
-                            onPressed: () {},
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: xMargins,
-                        vertical: xMargins / 2,
-                      ),
-                      child: DataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text('ID'),
-                          ),
-                          DataColumn(
-                            label: Text('Recipe Name'),
-                          ),
-                          DataColumn(
-                            label: Text('Publishing Status'),
-                          ),
-                        ],
-                        showCheckboxColumn: false,
-                        rows: <DataRow>[
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('00001')),
-                              DataCell(Text('Cheesy Soufflé Omelette')),
-                              DataCell(Text('Published')),
-                            ],
-                            onSelectChanged: (x) {
-                              Navigator.push(
-                                context,
-                                FadeRoute(page: RecipePage(false)),
+                          Card(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: xMargins,
+                              vertical: xMargins / 2,
+                            ),
+                            child: Consumer<RecipeListController>(
+                                builder: (context, controller, _) {
+                              return DataTable(
+                                columns: <DataColumn>[
+                                  DataColumn(
+                                    label: Text('ID'),
+                                  ),
+                                  DataColumn(
+                                    label: Text('Recipe Name'),
+                                  ),
+                                  DataColumn(
+                                    label: Text('Publishing Status'),
+                                  ),
+                                ],
+                                showCheckboxColumn: false,
+                                rows: buildList(context, controller),
                               );
-                            },
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('00002')),
-                              DataCell(Text('Classic Beef Burger')),
-                              DataCell(Text('Saved')),
-                            ],
+                            }),
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ),
+          );
+        });
+  }
+
+  List<DataRow> buildList(
+      BuildContext context, RecipeListController controller) {
+    return controller.recipes.map((m) {
+      return DataRow(
+        cells: <DataCell>[
+          DataCell(Text(m.id.toString())),
+          DataCell(Text(m.title)),
+          DataCell(Text(m.status)),
         ],
-      ),
-    );
+        onSelectChanged: (x) {
+          controller.onEdit(context, m);
+        },
+      );
+    }).toList();
   }
 }
 
 class RecipePage extends StatelessWidget {
   final RecipeController controller;
-  final bool isNew;
 
-  RecipePage(this.isNew) : controller = RecipeController.empty();
+  RecipePage(this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -146,10 +153,13 @@ class RecipePage extends StatelessWidget {
                                     },
                                   ),
                                   Text('>'),
-                                  FlatButton(
-                                    child: Text('00001'),
-                                    onPressed: null,
-                                  )
+                                  Consumer<RecipeController>(
+                                      builder: (context, controller, _) {
+                                    return FlatButton(
+                                      child: Text(controller.recipeName),
+                                      onPressed: null,
+                                    );
+                                  })
                                 ],
                               ),
                               Row(
@@ -223,7 +233,8 @@ class RecipePage extends StatelessWidget {
                                       vertical: xMargins / 2),
                                   child: Consumer<RecipeController>(
                                     builder: (context, controller, _) {
-                                      return TextField(
+                                      return TextFormField(
+                                        initialValue: controller.recipeName,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(),
                                           labelText: 'Recipe Name',
@@ -240,14 +251,16 @@ class RecipePage extends StatelessWidget {
                                       vertical: xMargins / 2),
                                   child: Consumer<RecipeController>(
                                     builder: (context, controller, _) {
-                                      return TextField(
-                                          decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: 'Yield',
-                                          ),
-                                          onChanged: (newText) {
-                                            controller.yieldChanged(newText);
-                                          });
+                                      return TextFormField(
+                                        initialValue: controller.yield,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Yield',
+                                        ),
+                                        onChanged: (newText) {
+                                          controller.yieldChanged(newText);
+                                        },
+                                      );
                                     },
                                   ),
                                 ),
@@ -259,16 +272,18 @@ class RecipePage extends StatelessWidget {
                                       Expanded(
                                         child: Consumer<RecipeController>(
                                             builder: (context, controller, _) {
-                                          return TextField(
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                labelText: 'Prep time',
-                                                suffix: Text('mins'),
-                                              ),
-                                              onChanged: (newText) {
-                                                controller
-                                                    .prepTimeChanged(newText);
-                                              });
+                                          return TextFormField(
+                                            initialValue: controller.prepTime,
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: 'Prep time',
+                                              suffix: Text('mins'),
+                                            ),
+                                            onChanged: (newText) {
+                                              controller
+                                                  .prepTimeChanged(newText);
+                                            },
+                                          );
                                         }),
                                       ),
                                       SizedBox(
@@ -277,16 +292,18 @@ class RecipePage extends StatelessWidget {
                                       Expanded(
                                         child: Consumer<RecipeController>(
                                             builder: (context, controller, _) {
-                                          return TextField(
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                labelText: 'Cook time',
-                                                suffix: Text('mins'),
-                                              ),
-                                              onChanged: (newText) {
-                                                controller
-                                                    .cookTimeChanged(newText);
-                                              });
+                                          return TextFormField(
+                                            initialValue: controller.cookTime,
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: 'Cook time',
+                                              suffix: Text('mins'),
+                                            ),
+                                            onChanged: (newText) {
+                                              controller
+                                                  .cookTimeChanged(newText);
+                                            },
+                                          );
                                         }),
                                       ),
                                     ],
@@ -372,30 +389,34 @@ class RecipeStep extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.fromLTRB(0, 12.0, 0, 0),
-              child: Text('Step 1'),
+              child: Text('Step ${controller.step}'),
             ),
             SizedBox(
               width: xMargins,
             ),
-            PopupMenuButton(
-              itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<directionsPopupOptions>>[
-                const PopupMenuItem<directionsPopupOptions>(
-                  value: directionsPopupOptions.firstOpt,
-                  child: Text('Move up'),
-                ),
-                const PopupMenuItem<directionsPopupOptions>(
-                  value: directionsPopupOptions.secondOpt,
-                  child: Text('Move down'),
-                ),
-                const PopupMenuItem<directionsPopupOptions>(
-                  value: directionsPopupOptions.secondOpt,
-                  child: Text('Delete step'),
-                ),
-              ],
-              onSelected: (x) {
-                print(x);
-              },
+            Consumer<RecipeStepController>(
+              builder: (context, controller, _) {
+                return PopupMenuButton(
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<stepPopupOptions>>[
+                    const PopupMenuItem<stepPopupOptions>(
+                      value: stepPopupOptions.firstOpt,
+                      child: Text('Move up'),
+                    ),
+                    const PopupMenuItem<stepPopupOptions>(
+                      value: stepPopupOptions.secondOpt,
+                      child: Text('Move down'),
+                    ),
+                    const PopupMenuItem<stepPopupOptions>(
+                      value: stepPopupOptions.thirdOpt,
+                      child: Text('Delete step'),
+                    ),
+                  ],
+                  onSelected: (stepPopupOptions x) {
+                    controller.onStepAction(x);
+                  },
+                );
+              }
             ),
             SizedBox(
               width: xMargins,
@@ -473,28 +494,27 @@ class RecipeStep extends StatelessWidget {
                           ),
                           Expanded(
                             child: Consumer<RecipeStepController>(
-                              builder: (context, controller, _) {
-                                return DropdownButtonFormField(
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
+                                builder: (context, controller, _) {
+                              return DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
+                                items: <DropdownMenuItem>[
+                                  DropdownMenuItem(
+                                    child: Text('Unit'),
                                   ),
-                                  items: <DropdownMenuItem>[
-                                    DropdownMenuItem(
-                                      child: Text('Unit'),
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('Item'),
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('Item'),
-                                    ),
-                                  ],
-                                  onChanged: (x) {
-                                    controller.unitChanged(x);
-                                  },
-                                );
-                              }
-                            ),
+                                  DropdownMenuItem(
+                                    child: Text('Item'),
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text('Item'),
+                                  ),
+                                ],
+                                onChanged: (x) {
+                                  controller.unitChanged(x);
+                                },
+                              );
+                            }),
                           ),
                         ],
                       )
@@ -504,33 +524,32 @@ class RecipeStep extends StatelessWidget {
                     height: xMargins / 2,
                   ),
                   Consumer<RecipeStepController>(
-                    builder: (context, controller, _) {
-                      return RaisedButton(
-                        child: Text('Add Ingredient'),
-                        onPressed: () {
-                          print("add ingredient button pressed");
-                          controller.addIngredient();
-                        },
-                      );
-                    }
-                  ),
+                      builder: (context, controller, _) {
+                    return RaisedButton(
+                      child: Text('Add Ingredient'),
+                      onPressed: () {
+                        print("add ingredient button pressed");
+                        controller.addIngredient();
+                      },
+                    );
+                  }),
                   SizedBox(
                     height: xMargins / 2,
                   ),
                   Consumer<RecipeStepController>(
-                    builder: (context, controller, _) {
-                      return TextField(
-                        minLines: 3,
-                        maxLines: 8,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Write your step directions here...'),
-                        onChanged: (newText) {
-                          controller.stepDirectionsChanged(newText);
-                        },
-                      );
-                    }
-                  ),
+                      builder: (context, controller, _) {
+                    return TextFormField(
+                      minLines: 3,
+                      maxLines: 8,
+                      initialValue: controller.directions,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Write your step directions here...'),
+                      onChanged: (newText) {
+                        controller.stepDirectionsChanged(newText);
+                      },
+                    );
+                  }),
                 ],
               ),
             ),

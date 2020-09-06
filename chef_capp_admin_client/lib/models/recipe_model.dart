@@ -3,28 +3,32 @@ import 'package:chef_capp_admin_client/index.dart';
 class RecipeModel {
   final IDModel _id;
   final String _title;
-  final String _yield;
-  final String _prepTime;
-  final String _cookTime;
+  final int _yield;
+  final int _prepTime;
+  final int _cookTime;
   final List<RecipeStepModel> _steps;
+  final String _status;
 
-  RecipeModel(IDModel id, String title, String yield, String prepTime, String cookTime, List<RecipeStepModel> steps) :
+  RecipeModel(IDModel id, String title, int yield, int prepTime, int cookTime, List<RecipeStepModel> steps, String status) :
       this._id = id,
       this._title = title,
       this._yield = yield,
       this._prepTime = prepTime,
       this._cookTime = cookTime,
-      this._steps = steps;
+      this._steps = steps,
+      this._status = status;
 
   IDModel get id => _id;
 
   String get title => _title;
 
-  String get yield => _yield;
+  int get yield => _yield;
 
-  String get prepTime => _prepTime;
+  int get prepTime => _prepTime;
 
-  String get cookTime => _cookTime;
+  int get cookTime => _cookTime;
 
   List<RecipeStepModel> get steps => [..._steps];
+
+  String get status => _status;
 }

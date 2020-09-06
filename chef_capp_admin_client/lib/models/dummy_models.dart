@@ -17,7 +17,7 @@ class DummyModels {
       DummyModels.recipeStep(3),
       DummyModels.recipeStep(4),
     ];
-    return RecipeModel(id, "A title $id", "yield $id", "preptime $id", "cooktime $id", steps);
+    return RecipeModel(id, "A title $id", 4, 15, 30, steps, "published");
   }
 
   static RecipeStepModel recipeStep(int step) {
@@ -27,7 +27,7 @@ class DummyModels {
       DummyModels.stepIngredient(),
       DummyModels.stepIngredient(),
     ];
-    return RecipeStepModel("directions $id", step, []);
+    return RecipeStepModel("step $step (directions $id)", step, []);
   }
 
   static StepIngredientModel stepIngredient() {
