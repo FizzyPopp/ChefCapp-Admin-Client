@@ -291,6 +291,7 @@ class RecipePage extends StatelessWidget {
                                         Column(
                                           children: [
                                             Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
                                                 Expanded(
                                                   child: TextField(
@@ -352,6 +353,14 @@ class RecipePage extends StatelessWidget {
 
                                                     },
                                                   ),
+                                                ),
+                                                SizedBox(width: xMargins,),
+                                                IconButton(
+                                                  color: Colors.red,
+                                                  icon: Icon(Icons.delete),
+                                                  onPressed: () {
+
+                                                  },
                                                 ),
                                               ],
                                             )
