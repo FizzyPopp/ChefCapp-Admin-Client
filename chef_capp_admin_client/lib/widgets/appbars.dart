@@ -19,8 +19,8 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           child: RaisedButton(
             child: Text('SIGN IN'),
             onPressed: () {
-              _dbService.test();
-
+              //_dbService.test();
+              //ParentService.testValidate();
               //_auth.test();
             },
           ),

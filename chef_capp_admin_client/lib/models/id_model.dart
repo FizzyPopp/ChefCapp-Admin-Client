@@ -1,18 +1,30 @@
 import 'package:chef_capp_admin_client/index.dart';
+part 'id_model.g.dart';
 
+@JsonSerializable()
 class IDModel implements EqualsInterface {
-  final String _hash;
+  final String _value;
 
-  IDModel(String hash) :
-        this._hash = hash;
+  IDModel(String value) :
+        this._value = value;
 
-  String get hash => _hash;
+  IDModel.random() : this._value = genUUID();
+
+  static String genUUID() {
+    return Uuid().v4();
+  }
+
+  String get value => _value;
 
   @override
-  String toString() => _hash;
+  String toString() => _value;
 
   bool equals(var other) {
     if (other is! IDModel) return false;
-    return other.hash == this.hash;
+    return other.value == this.value;
   }
+
+  factory IDModel.fromJson(Map<String, dynamic> json) => _$IDModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$IDModelToJson(this);
 }

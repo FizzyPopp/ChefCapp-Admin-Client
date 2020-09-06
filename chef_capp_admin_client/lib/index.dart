@@ -1,6 +1,9 @@
 export 'package:flutter/material.dart';
 
 export 'package:flutter_chips_input/flutter_chips_input.dart';
+export 'package:json_annotation/json_annotation.dart';
+export 'package:uuid/uuid.dart';
+export 'package:http/http.dart';
 
 export 'package:chef_capp_admin_client/screens/app.dart';
 export 'package:chef_capp_admin_client/screens/ingredients.dart';

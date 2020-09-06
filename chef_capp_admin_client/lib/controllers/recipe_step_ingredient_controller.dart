@@ -9,7 +9,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
   RecipeStepIngredientController.fromModel(StepIngredientModel ingredient) : this.name = ingredient.name {
     _verbiage = "";
     _quantity = ingredient.quantity.toString();
-    _unit = ingredient.unit.toString();
+    _unit = ingredient.unit;
   }
 
   double _parseQuantity() {

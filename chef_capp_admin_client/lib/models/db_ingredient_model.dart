@@ -1,5 +1,7 @@
 import 'package:chef_capp_admin_client/index.dart';
+part 'db_ingredient_model.g.dart';
 
+@JsonSerializable()
 class DBIngredientModel implements EqualsInterface {
   // may need a heck of a lot more fields to fully describe an ingredient
   final IDModel _id;
@@ -21,7 +23,7 @@ class DBIngredientModel implements EqualsInterface {
 
   String get plural => _plural;
 
-  String get unit => _unit["singular"];
+  Map<String, dynamic> get unit => _unit; // BAD
 
   String get category => _category;
 
@@ -59,4 +61,8 @@ class DBIngredientModel implements EqualsInterface {
     // return
     return DBIngredientModel(IDModel(data["id"]), name, plural, unit, "A Category");
   }
+
+  factory DBIngredientModel.fromJson(Map<String, dynamic> json) => _$DBIngredientModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DBIngredientModelToJson(this);
 }

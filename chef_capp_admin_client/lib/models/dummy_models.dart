@@ -32,7 +32,7 @@ class DummyModels {
 
   static StepIngredientModel stepIngredient() {
     IDModel id = DummyModels.id();
-    return StepIngredientModel(id, "name $id", "verbiage $id", double.parse(id.hash), "unit $id");
+    return StepIngredientModel(id, "name $id", "verbiage $id", double.parse(id.value), "unit $id");
   }
 
   static DBIngredientModel dbIngredient() {
