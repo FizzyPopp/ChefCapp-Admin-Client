@@ -241,6 +241,7 @@ class IngredientAdd extends StatelessWidget {
                         value: 0,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
+                          labelText: 'Measurement type',
                         ),
                         items:
                             toDropMenuItems(controller.measurementTypeOptions),
@@ -258,6 +259,7 @@ class IngredientAdd extends StatelessWidget {
                         value: 0,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
+                          labelText: 'Cooking unit',
                         ),
                         items: toDropMenuItems(controller.cookingUnitOptions),
                         onChanged: (int x) {
@@ -274,6 +276,7 @@ class IngredientAdd extends StatelessWidget {
                         value: 0,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
+                          labelText: 'Portion unit',
                         ),
                         items: toDropMenuItems(controller.portionUnitOptions),
                         onChanged: (int x) {
