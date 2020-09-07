@@ -3,8 +3,8 @@ import 'package:chef_capp_admin_client/index.dart';
 class Cache {
   ValidList<DBIngredientModel> ingredients;
   ValidList<RecipeModel> recipes;
-  ValidList<String> specificUnits;
-  ValidList<String> ingredientCategories;
+  ValidList<SpecificUnitModel> specificUnits;
+  ValidList<IngredientCategoryModel> ingredientCategories;
 }
 
 class ValidList<T> {

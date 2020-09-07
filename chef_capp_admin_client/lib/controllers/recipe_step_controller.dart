@@ -3,59 +3,60 @@ import 'package:chef_capp_admin_client/index.dart';
 class RecipeStepController extends ChangeNotifier {
   final RecipeController parent;
   int _step;
-  String _directions, _newIngredient, _newVerbiage, _newQuantity, _newUnit;
-  List<RecipeStepIngredientController> _ingredientControllers;
+  String _directions;
+  List<RecipeStepIngredientController> _ingredients;
+  Function genFakeID = fakeIDClosure();
+
+  static Function fakeIDClosure() {
+    int fakeID = 0;
+    return () {
+      return fakeID++;
+    };
+  }
 
   RecipeStepController(RecipeStepModel rs, this.parent) {
     _step = rs.step;
     _directions = rs.directions;
-    _ingredientControllers = rs.ingredients
-        .map((m) => RecipeStepIngredientController.fromModel(m))
+    _ingredients = rs.ingredients
+        .map((m) => RecipeStepIngredientController(m, genFakeID(), this))
         .toList();
+    if (_ingredients.length == 0) {
+      _ingredients = [RecipeStepIngredientController.empty(genFakeID(), this)];
+    }
   }
 
   RecipeStepController.empty(int step, this.parent) {
     _step = step;
     _directions = "";
-    _ingredientControllers = [];
+    _ingredients = [];
   }
 
   int get step => _step;
 
+  set step(int i) => _step = i;
+
   String get directions => _directions;
 
-  void findIngredientChanged(String newText) {
-    _newIngredient = newText;
-    // bring up suggestions
-  }
-
-  void verbiageChanged(x) {
-    _newVerbiage = x;
-  }
-
-  void quantityChanged(String newText) {
-    _newQuantity = newText;
-  }
-
-  void unitChanged(x) {
-    _newUnit = x;
-  }
+  List<RecipeStepIngredientController> get ingredients => [..._ingredients];
 
   RecipeStepModel toModel() {
     List<StepIngredientModel> ingredients =
-        _ingredientControllers.map((c) => c.toModel()).toList();
-    return RecipeStepModel(_directions, _step, ingredients);
+        _ingredients.map((c) => c.toModel()).toList();
+    return RecipeStepModel(IDModel.nil(), _directions, _step, ingredients);
   }
 
-  void addIngredient() {
-    RecipeStepIngredientController out = RecipeStepIngredientController(
-        _newIngredient, _newVerbiage, _newQuantity, _newUnit);
-    _ingredientControllers.add(out);
-    _newIngredient = "";
-    _newVerbiage = "";
-    _newQuantity = "";
-    _newUnit = "";
+  void onAddIngredient() {
+    _ingredients.add(RecipeStepIngredientController.empty(genFakeID(), this));
+    _ingredients = [..._ingredients];
     notifyListeners();
+  }
+
+  bool deleteIngredient(RecipeStepIngredientController rsic) {
+    int initialLen = _ingredients.length;
+    _ingredients.removeWhere((elem) => elem.fakeID == rsic.fakeID);
+    _ingredients = [..._ingredients];
+    notifyListeners();
+    return(_ingredients.length != initialLen);
   }
 
   void stepDirectionsChanged(String newText) {

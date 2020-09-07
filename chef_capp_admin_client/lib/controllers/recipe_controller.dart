@@ -2,8 +2,8 @@ import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeController extends ChangeNotifier {
   final RecipeListController parent;
-  String _id, _recipeName, _yield, _prepTime, _cookTime;
-  List<RecipeStepController> _stepControllers;
+  String _id, _recipeName, _yield, _prepTime, _cookTime, _status;
+  List<RecipeStepController> _steps;
 
   RecipeController(RecipeModel model, this.parent) {
     _id = model.id.toString();
@@ -11,16 +11,18 @@ class RecipeController extends ChangeNotifier {
     _yield = model.yield.toString();
     _prepTime = model.prepTime.toString();
     _cookTime = model.cookTime.toString();
-    _stepControllers = model.steps.map((s) => RecipeStepController(s, this)).toList();
+    _steps = model.steps.map((s) => RecipeStepController(s, this)).toList();
+    _status = model.status;
   }
 
   RecipeController.empty(this.parent) {
-    _id = IDModel.genUUID();
+    _id = IDModel.nilUUID();
     _recipeName = "";
     _yield = "";
     _prepTime = "";
     _cookTime = "";
-    _stepControllers = [];
+    _steps = [];
+    _status = "new";
   }
 
   String get id => _id;
@@ -33,7 +35,9 @@ class RecipeController extends ChangeNotifier {
 
   String get cookTime => _cookTime;
 
-  List<RecipeStepController> get stepControllers => [..._stepControllers];
+  List<RecipeStepController> get steps => [..._steps];
+
+  String get status => _status;
 
   void onRecipesCrumb(BuildContext context) {
     Navigator.pop(context);
@@ -72,20 +76,39 @@ class RecipeController extends ChangeNotifier {
   }
 
   RecipeStepController newStepController() {
-    RecipeStepController out = RecipeStepController.empty(_stepControllers.length, this);
-    _stepControllers.add(out);
+    RecipeStepController out = RecipeStepController.empty(_steps.length, this);
+    _steps.add(out);
+    notifyListeners();
     return out;
   }
 
-  bool moveStepUp(RecipeStepController step) {
-
+  void moveStepUp(RecipeStepController step) {
+      if (step.step > 1) {
+        _steps.insert(step.step - 2, _steps.removeAt(step.step - 1));
+        setSteps();
+        notifyListeners();
+      }
   }
 
+  // THESE ARE NOT WORKING???
   bool moveStepDown(RecipeStepController step) {
-
+    if (step.step < _steps.length) {
+      _steps.insert(step.step, _steps.removeAt(step.step - 1));
+      setSteps();
+      notifyListeners();
+    }
   }
 
   bool deleteStep(RecipeStepController step) {
+    _steps.removeAt(step.step - 1);
+    setSteps();
+    notifyListeners();
+    print("deleted step");
+  }
 
+  void setSteps() {
+    for (int i = 0; i < _steps.length; i++) {
+      _steps[i].step = (i+1);
+    }
   }
 }

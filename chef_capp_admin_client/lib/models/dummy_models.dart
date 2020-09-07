@@ -27,7 +27,7 @@ class DummyModels {
       DummyModels.stepIngredient(),
       DummyModels.stepIngredient(),
     ];
-    return RecipeStepModel("step $step (directions $id)", step, []);
+    return RecipeStepModel(id, "directions for step with id $id", step, steps);
   }
 
   static StepIngredientModel stepIngredient() {

@@ -1,6 +1,6 @@
 import 'package:chef_capp_admin_client/index.dart';
 
-class RecipeModel {
+class RecipeModel implements EqualsInterface {
   final IDModel _id;
   final String _title;
   final int _yield;
@@ -34,5 +34,10 @@ class RecipeModel {
 
   static RecipeModel fromDB(data) {
     return null;
+  }
+
+  bool equals(var other) {
+    if (other is! RecipeModel) return false;
+    return other.id.equals(this.id);
   }
 }

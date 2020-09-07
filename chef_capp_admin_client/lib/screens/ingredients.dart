@@ -163,6 +163,7 @@ class IngredientAdd extends StatelessWidget {
                     child: Consumer<DBIngredientController>(
                       builder: (context, controller, _) {
                         return TextFormField(
+                          key: UniqueKey(),
                           initialValue: controller.name,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -180,6 +181,7 @@ class IngredientAdd extends StatelessWidget {
                     child: Consumer<DBIngredientController>(
                       builder: (context, controller, _) {
                         return TextFormField(
+                          key: UniqueKey(),
                           initialValue: controller.tag,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -197,6 +199,7 @@ class IngredientAdd extends StatelessWidget {
                     child: Consumer<DBIngredientController>(
                       builder: (context, controller, _) {
                         return TextFormField(
+                          key: UniqueKey(),
                           initialValue: controller.plural,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -214,6 +217,7 @@ class IngredientAdd extends StatelessWidget {
                     child: Consumer<DBIngredientController>(
                         builder: (context, controller, _) {
                       return DropdownButtonFormField<int>(
+                        key: UniqueKey(),
                         value: 0,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -238,6 +242,7 @@ class IngredientAdd extends StatelessWidget {
                     child: Consumer<DBIngredientController>(
                         builder: (context, controller, _) {
                       return DropdownButtonFormField<int>(
+                        key: UniqueKey(),
                         value: 0,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -256,6 +261,7 @@ class IngredientAdd extends StatelessWidget {
                     child: Consumer<DBIngredientController>(
                         builder: (context, controller, _) {
                       return DropdownButtonFormField<int>(
+                        key: UniqueKey(),
                         value: 0,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -273,6 +279,7 @@ class IngredientAdd extends StatelessWidget {
                     child: Consumer<DBIngredientController>(
                         builder: (context, controller, _) {
                       return DropdownButtonFormField<int>(
+                        key: UniqueKey(),
                         value: 0,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),

@@ -61,7 +61,7 @@ class DatabaseService {
     return cache.ingredients.data;
   }
 
-  Future<List<String>> getIngredientCategories() async {
+  Future<List<IngredientCategoryModel>> getIngredientCategories() async {
     if (cache.ingredientCategories.isSet) {
       return cache.ingredientCategories.data;
     }
@@ -70,11 +70,11 @@ class DatabaseService {
 
     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
 
-    cache.ingredientCategories.data = snapshot.data()['categories'];
+    cache.ingredientCategories.data = snapshot.data()['categories'].map((cat) => IngredientCategoryModel(cat)).toList();
     return cache.ingredientCategories.data;
   }
 
-  Future<List<String>> getIngredientSpecificUnits() async {
+  Future<List<SpecificUnitModel>> getSpecificUnits() async {
     if (cache.specificUnits.isSet) {
       return cache.specificUnits.data;
     }
@@ -83,7 +83,7 @@ class DatabaseService {
 
     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
 
-    cache.specificUnits.data = snapshot.data()['specific-units'];
+    cache.specificUnits.data = snapshot.data()['specific-units'].map((unit) => SpecificUnitModel.fromDB(unit)).toList();
     return cache.specificUnits.data;
   }
 

@@ -1,15 +1,22 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeStepIngredientController extends ChangeNotifier {
+  final RecipeStepController _parent;
+  final int fakeID;
   String _name, _verbiage, _quantity, _unit;
 
-  RecipeStepIngredientController(this._name, this._verbiage, this._quantity, this._unit);
-
-  RecipeStepIngredientController.fromModel(StepIngredientModel ingredient) {
+  RecipeStepIngredientController(StepIngredientModel ingredient, this.fakeID, this._parent) {
     _name = ingredient.name;
     _verbiage = "";
     _quantity = ingredient.quantity.toString();
     _unit = ingredient.unit;
+  }
+
+  RecipeStepIngredientController.empty(this.fakeID, this._parent) {
+    _name = "";
+    _verbiage = "";
+    _quantity = "";
+    _unit = "";
   }
 
   double _parseQuantity() {
@@ -24,9 +31,14 @@ class RecipeStepIngredientController extends ChangeNotifier {
     }
   }
 
+  String get name => _name;
   String get verbiage => _verbiage;
   String get quantity => _quantity;
   String get unit => _unit;
+
+  void searchIngredients(String newText) {
+    // do something
+  }
 
   void verbiageChanged(x) {
     _verbiage = x;
@@ -41,6 +53,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
   }
 
   void onDelete() {
+    _parent.deleteIngredient(this);
     // do something
   }
 }

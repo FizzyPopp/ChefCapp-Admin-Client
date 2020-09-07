@@ -29,4 +29,8 @@ class StepIngredientModel implements EqualsInterface {
     if (other is! StepIngredientModel) return false;
     return this.id == other.id;
   }
+
+  static StepIngredientModel fromDB(data) {
+    return null;
+  }
 }

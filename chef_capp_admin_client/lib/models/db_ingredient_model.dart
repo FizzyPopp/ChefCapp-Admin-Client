@@ -1,6 +1,9 @@
 import 'package:chef_capp_admin_client/index.dart';
 part 'db_ingredient_model.g.dart';
 
+// JSON SERIALIZATION WILL NOT WORK
+// because id != "...", id will equal some nested thing
+
 @JsonSerializable()
 class DBIngredientModel implements EqualsInterface {
   // may need a heck of a lot more fields to fully describe an ingredient
@@ -32,9 +35,9 @@ class DBIngredientModel implements EqualsInterface {
     return this.id == other.id;
   }
 
-  String get amount {
-    return "0$_unit";
-  }
+  factory DBIngredientModel.fromJson(Map<String, dynamic> json) => _$DBIngredientModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DBIngredientModelToJson(this);
 
   static DBIngredientModel fromDB(data) {
     // sanitize
@@ -61,8 +64,4 @@ class DBIngredientModel implements EqualsInterface {
     // return
     return DBIngredientModel(IDModel(data["id"]), name, plural, unit, "A Category");
   }
-
-  factory DBIngredientModel.fromJson(Map<String, dynamic> json) => _$DBIngredientModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DBIngredientModelToJson(this);
 }
