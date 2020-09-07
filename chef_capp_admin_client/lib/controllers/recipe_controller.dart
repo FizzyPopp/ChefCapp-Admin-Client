@@ -87,13 +87,20 @@ class RecipeController extends ChangeNotifier {
         _steps.insert(step.step - 2, _steps.removeAt(step.step - 1));
         setSteps();
         notifyListeners();
+      } else {
+        _steps.add(_steps.removeAt(0));
+        setSteps();
+        notifyListeners();
       }
   }
 
-  // THESE ARE NOT WORKING???
   bool moveStepDown(RecipeStepController step) {
     if (step.step < _steps.length) {
       _steps.insert(step.step, _steps.removeAt(step.step - 1));
+      setSteps();
+      notifyListeners();
+    } else {
+      _steps.insert(0, _steps.removeAt(_steps.length - 1));
       setSteps();
       notifyListeners();
     }

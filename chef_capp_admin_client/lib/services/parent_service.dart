@@ -28,6 +28,8 @@ class ParentService {
     //String url = 'ws://127.0.0.1:3000/validate';
     //String url = 'http://lvh.me:3000/validate';
 
+    // USE PUSH
+
     String url = 'https://jsonplaceholder.typicode.com/posts/1';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"title": "Hello", "body": "body text", "userId": 1}';  // make PUT request
