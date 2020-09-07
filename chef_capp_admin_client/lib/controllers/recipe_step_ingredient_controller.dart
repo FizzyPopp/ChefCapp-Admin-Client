@@ -1,12 +1,12 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeStepIngredientController extends ChangeNotifier {
-  final String name;
-  String _verbiage, _quantity, _unit;
+  String _name, _verbiage, _quantity, _unit;
 
-  RecipeStepIngredientController(this.name, this._verbiage, this._quantity, this._unit);
+  RecipeStepIngredientController(this._name, this._verbiage, this._quantity, this._unit);
 
-  RecipeStepIngredientController.fromModel(StepIngredientModel ingredient) : this.name = ingredient.name {
+  RecipeStepIngredientController.fromModel(StepIngredientModel ingredient) {
+    _name = ingredient.name;
     _verbiage = "";
     _quantity = ingredient.quantity.toString();
     _unit = ingredient.unit;
@@ -20,7 +20,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
     if (_parseQuantity() == 0) {
       throw("bad quantity");
     } else {
-      return StepIngredientModel(null, name, _verbiage, _parseQuantity(), _unit);
+      return StepIngredientModel(null, _name, _verbiage, _parseQuantity(), _unit);
     }
   }
 
