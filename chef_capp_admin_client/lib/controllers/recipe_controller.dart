@@ -2,10 +2,11 @@ import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeController extends ChangeNotifier {
   final RecipeListController parent;
-  String _recipeName, _yield, _prepTime, _cookTime;
+  String _id, _recipeName, _yield, _prepTime, _cookTime;
   List<RecipeStepController> _stepControllers;
 
   RecipeController(RecipeModel model, this.parent) {
+    _id = model.id.toString();
     _recipeName = model.title;
     _yield = model.yield.toString();
     _prepTime = model.prepTime.toString();
@@ -14,12 +15,15 @@ class RecipeController extends ChangeNotifier {
   }
 
   RecipeController.empty(this.parent) {
+    _id = IDModel.genUUID();
     _recipeName = "";
     _yield = "";
     _prepTime = "";
     _cookTime = "";
     _stepControllers = [];
   }
+
+  String get id => _id;
 
   String get recipeName => _recipeName;
 

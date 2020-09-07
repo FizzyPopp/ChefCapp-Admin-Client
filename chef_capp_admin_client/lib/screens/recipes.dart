@@ -224,7 +224,11 @@ class RecipePage extends StatelessWidget {
                             child: ListView(
                               shrinkWrap: true,
                               children: [
-                                Text('OVERVIEW - ID 00001'),
+                                Consumer<RecipeController>(
+                                  builder: (context, controller, _) {
+                                    return Text('OVERVIEW - ID ${controller.id}');
+                                  }
+                                ),
                                 SizedBox(
                                   height: xMargins / 2,
                                 ),
@@ -308,6 +312,10 @@ class RecipePage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                                  child: Text('COVER IMAGE'),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
@@ -515,6 +523,14 @@ class RecipeStep extends StatelessWidget {
                                 },
                               );
                             }),
+                          ),
+                          SizedBox(width: xMargins,),
+                          IconButton(
+                            color: Colors.red,
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+
+                            },
                           ),
                         ],
                       )

@@ -8,10 +8,11 @@ import 'package:chef_capp_admin_client/index.dart';
 // read all ingredients into models
 
 class DatabaseService {
-  FireState _fireState; // 0: not initialized, 1: attempting to initialize, 2: initialized
+  FireState _fireState;
   final AuthService _authService = AuthService();
+  final Cache cache;
 
-  DatabaseService() {
+  DatabaseService() : cache = Cache() {
     _fireState = FireState.Uninitialized;
   }
 
@@ -41,6 +42,10 @@ class DatabaseService {
   }
 
   Future<List<DBIngredientModel>> getIngredients() async {
+    if (cache.ingredients.isSet) {
+      return cache.ingredients.data;
+    }
+
     await init();
 
     QuerySnapshot qSnapshot = await FirebaseFirestore.instance.collection('ingredients').get();
@@ -52,26 +57,41 @@ class DatabaseService {
       }
     }
 
-    return out;
+    cache.ingredients.data = out;
+    return cache.ingredients.data;
   }
 
   Future<List<String>> getIngredientCategories() async {
+    if (cache.ingredientCategories.isSet) {
+      return cache.ingredientCategories.data;
+    }
+
     await init();
 
     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
 
-    return snapshot.data()['categories'];
+    cache.ingredientCategories.data = snapshot.data()['categories'];
+    return cache.ingredientCategories.data;
   }
 
   Future<List<String>> getIngredientSpecificUnits() async {
+    if (cache.specificUnits.isSet) {
+      return cache.specificUnits.data;
+    }
+
     await init();
 
     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
 
-    return snapshot.data()['specific-units'];
+    cache.specificUnits.data = snapshot.data()['specific-units'];
+    return cache.specificUnits.data;
   }
 
   Future<List<RecipeModel>> getRecipes() async {
+    if (cache.recipes.isSet) {
+      return cache.recipes.data;
+    }
+
     await init();
 
     QuerySnapshot qSnapshot = await FirebaseFirestore.instance.collection('recipes').get();
@@ -83,7 +103,8 @@ class DatabaseService {
       }
     }
 
-    return out;
+    cache.recipes.data = out;
+    return cache.recipes.data;
   }
 }
 

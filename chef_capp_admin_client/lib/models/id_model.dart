@@ -14,6 +14,10 @@ class IDModel implements EqualsInterface {
     return Uuid().v4();
   }
 
+  static String nilUUID() {
+    return "00000000-0000-0000-0000-000000000000";
+  }
+
   String get value => _value;
 
   @override
