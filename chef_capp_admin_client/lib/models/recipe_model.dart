@@ -31,4 +31,8 @@ class RecipeModel {
   List<RecipeStepModel> get steps => [..._steps];
 
   String get status => _status;
+
+  static RecipeModel fromDB(data) {
+    return null;
+  }
 }

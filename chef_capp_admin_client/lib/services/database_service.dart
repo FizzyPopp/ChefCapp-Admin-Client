@@ -16,14 +16,19 @@ class DatabaseService {
   }
 
   Future<bool> init() async {
-    if (_fireState == FireState.Uninitialized) {
+    if (_fireState == FireState.Initialized) {
+      return true;
+    } else if (_fireState == FireState.Uninitialized) {
       _fireState = FireState.Initializing;
       await Firebase.initializeApp();
       await _authService.init();
       _fireState = FireState.Initialized;
       return true;
     } else {
-      return false;
+      while (_fireState != FireState.Initialized) {
+        await Future.delayed(Duration(milliseconds: 1));
+      }
+      return true;
     }
   }
 
@@ -36,11 +41,7 @@ class DatabaseService {
   }
 
   Future<List<DBIngredientModel>> getIngredients() async {
-    if (_fireState != FireState.Initialized) {
-      // throw something?
-      // try to initialize?
-      return [];
-    }
+    await init();
 
     QuerySnapshot qSnapshot = await FirebaseFirestore.instance.collection('ingredients').get();
 
@@ -51,8 +52,35 @@ class DatabaseService {
       }
     }
 
-    for (DBIngredientModel zi in out) {
-      print(zi);
+    return out;
+  }
+
+  Future<List<String>> getIngredientCategories() async {
+    await init();
+
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
+
+    return snapshot.data()['categories'];
+  }
+
+  Future<List<String>> getIngredientSpecificUnits() async {
+    await init();
+
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
+
+    return snapshot.data()['specific-units'];
+  }
+
+  Future<List<RecipeModel>> getRecipes() async {
+    await init();
+
+    QuerySnapshot qSnapshot = await FirebaseFirestore.instance.collection('recipes').get();
+
+    List<RecipeModel> out = [];
+    for (DocumentSnapshot ds in qSnapshot.docs) {
+      if (ds.id != "metadata") {
+        out.add(RecipeModel.fromDB(ds.data()));
+      }
     }
 
     return out;

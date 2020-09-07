@@ -1,5 +1,9 @@
 import 'package:chef_capp_admin_client/index.dart';
 
+
+// flutter run -d chrome --web-hostname=127.0.0.1 --web-port=8200
+
+
 class ParentService {
   static AuthService _authService;
   static DatabaseService _databaseService;
@@ -21,8 +25,9 @@ class ParentService {
   static testValidate() async {
     //String url = 'http://localhost:3000/validate';
     //String url = 'http://10.0.2.2:3000/validate';
+    //String url = 'ws://127.0.0.1:3000/validate';
+    //String url = 'http://lvh.me:3000/validate';
 
-    /*
     String url = 'https://jsonplaceholder.typicode.com/posts/1';
     Map<String, String> headers = {"Content-type": "application/json"};
     String json = '{"title": "Hello", "body": "body text", "userId": 1}';  // make PUT request
@@ -33,6 +38,5 @@ class ParentService {
 
     print(body);
     print(statusCode);
-     */
   }
 }
