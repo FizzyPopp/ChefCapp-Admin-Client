@@ -17,8 +17,4 @@ class SpecificUnitModel implements EqualsInterface {
   factory SpecificUnitModel.fromJson(Map<String, dynamic> json) => _$SpecificUnitModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$SpecificUnitModelToJson(this);
-
-  static SpecificUnitModel fromDB(data) {
-    return SpecificUnitModel(data);
-  }
 }

@@ -1,5 +1,7 @@
 import 'package:chef_capp_admin_client/index.dart';
+part 'step_ingredient_model.g.dart';
 
+@JsonSerializable()
 class StepIngredientModel implements EqualsInterface {
   // may need a heck of a lot more fields to fully describe an ingredient
   final IDModel _id;
@@ -33,4 +35,8 @@ class StepIngredientModel implements EqualsInterface {
   static StepIngredientModel fromDB(data) {
     return null;
   }
+
+  factory StepIngredientModel.fromJson(Map<String, dynamic> json) => _$StepIngredientModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$StepIngredientModelToJson(this);
 }

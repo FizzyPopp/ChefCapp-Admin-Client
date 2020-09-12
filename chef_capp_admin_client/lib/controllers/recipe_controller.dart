@@ -48,11 +48,11 @@ class RecipeController extends ChangeNotifier {
   }
 
   void onSave(BuildContext context) {
-
+    // send to validator
   }
 
   void onPublish(BuildContext context) {
-
+    // send to db
   }
 
   void recipeNameChanged(String newText) {

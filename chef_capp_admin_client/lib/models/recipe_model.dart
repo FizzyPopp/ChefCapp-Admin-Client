@@ -1,5 +1,7 @@
 import 'package:chef_capp_admin_client/index.dart';
+part 'recipe_model.g.dart';
 
+@JsonSerializable()
 class RecipeModel implements EqualsInterface {
   final IDModel _id;
   final String _title;
@@ -40,4 +42,8 @@ class RecipeModel implements EqualsInterface {
     if (other is! RecipeModel) return false;
     return other.id.equals(this.id);
   }
+
+  factory RecipeModel.fromJson(Map<String, dynamic> json) => _$RecipeModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RecipeModelToJson(this);
 }

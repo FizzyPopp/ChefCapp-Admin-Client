@@ -182,17 +182,69 @@ class IngredientAdd extends StatelessWidget {
                       builder: (context, controller, _) {
                         return TextFormField(
                           key: UniqueKey(),
-                          initialValue: controller.tag,
+                          initialValue: "",
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Tag',
                           ),
                           onChanged: (newText) {
-                            controller.ingredientTagChanged(newText);
+                            print(newText);
+                            //controller.ingredientTagChanged(newText);
                           },
                         );
                       },
                     ),
+                  ),
+                  Consumer<DBIngredientController>(
+                    builder: (context, controller, _) {
+                      return ChipsInput(
+                        allowChipEditing: false,
+                        findSuggestions: (String query) {
+                          if (query.length != 0) {
+                            var lowercaseQuery = query.toLowerCase();
+                            return mockResults.where((profile) {
+                              return profile.name.toLowerCase().contains(query.toLowerCase()) || profile.email.toLowerCase().contains(query.toLowerCase());
+                            }).toList(growable: false)
+                              ..sort((a, b) => a.name
+                                  .toLowerCase()
+                                  .indexOf(lowercaseQuery)
+                                  .compareTo(b.name.toLowerCase().indexOf(lowercaseQuery)));
+                          } else {
+                            return const <AppProfile>[];
+                          }
+                        },
+                        decoration: InputDecoration(
+                          labelText: "Tags",
+                        ),
+                        maxChips: 3,
+                        onChanged: (List<dynamic> data) {
+                          data = data.map((d) => d.toString()).toList();
+                          controller.ingredientTagsChanged(data);
+                        },
+                        chipBuilder: (context, state, profile) {
+                          return InputChip(
+                            key: ObjectKey(profile),
+                            label: Text(profile.name),
+                            avatar: CircleAvatar(
+                              backgroundImage: NetworkImage(profile.imageUrl),
+                            ),
+                            onDeleted: () => state.deleteChip(profile),
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          );
+                        },
+                        suggestionBuilder: (context, state, profile) {
+                          return ListTile(
+                            key: ObjectKey(profile),
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(profile.imageUrl),
+                            ),
+                            title: Text(profile.name),
+                            subtitle: Text(profile.email),
+                            onTap: () => state.selectSuggestion(profile),
+                          );
+                        },
+                      );
+                    }
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: xMargins / 2),
@@ -291,52 +343,6 @@ class IngredientAdd extends StatelessWidget {
                         },
                       );
                     }),
-                  ),
-                  ChipsInput(
-                    allowChipEditing: false,
-                    findSuggestions: (String query) {
-                      if (query.length != 0) {
-                        var lowercaseQuery = query.toLowerCase();
-                        return mockResults.where((profile) {
-                          return profile.name.toLowerCase().contains(query.toLowerCase()) || profile.email.toLowerCase().contains(query.toLowerCase());
-                        }).toList(growable: false)
-                          ..sort((a, b) => a.name
-                              .toLowerCase()
-                              .indexOf(lowercaseQuery)
-                              .compareTo(b.name.toLowerCase().indexOf(lowercaseQuery)));
-                      } else {
-                        return const <AppProfile>[];
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: "Select People",
-                    ),
-                    maxChips: 3,
-                    onChanged: (data) {
-                      print(data);
-                    },
-                    chipBuilder: (context, state, profile) {
-                      return InputChip(
-                        key: ObjectKey(profile),
-                        label: Text(profile.name),
-                        avatar: CircleAvatar(
-                          backgroundImage: NetworkImage(profile.imageUrl),
-                        ),
-                        onDeleted: () => state.deleteChip(profile),
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      );
-                    },
-                    suggestionBuilder: (context, state, profile) {
-                      return ListTile(
-                        key: ObjectKey(profile),
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(profile.imageUrl),
-                        ),
-                        title: Text(profile.name),
-                        subtitle: Text(profile.email),
-                        onTap: () => state.selectSuggestion(profile),
-                      );
-                    },
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

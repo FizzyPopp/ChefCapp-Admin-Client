@@ -70,7 +70,7 @@ class DatabaseService {
 
     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
 
-    cache.ingredientCategories.data = snapshot.data()['categories'].map((cat) => IngredientCategoryModel(cat)).toList();
+    cache.ingredientCategories.data = snapshot.data()['categories'].map<IngredientCategoryModel>((cat) => IngredientCategoryModel(cat)).toList();
     return cache.ingredientCategories.data;
   }
 
@@ -83,7 +83,7 @@ class DatabaseService {
 
     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
 
-    cache.specificUnits.data = snapshot.data()['specific-units'].map((unit) => SpecificUnitModel.fromDB(unit)).toList();
+    cache.specificUnits.data = snapshot.data()['specific-units'].map<SpecificUnitModel>((unit) => SpecificUnitModel(unit)).toList();
     return cache.specificUnits.data;
   }
 
