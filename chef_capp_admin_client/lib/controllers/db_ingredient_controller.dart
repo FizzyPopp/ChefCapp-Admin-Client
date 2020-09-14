@@ -3,6 +3,7 @@ import 'package:chef_capp_admin_client/index.dart';
 class DBIngredientController extends ChangeNotifier {
   final DBIngredientListController parent;
   bool _volume;
+  IDModel _id;
   String _name, _plural, _category, _cookingUnit, _portionUnit;
   List<String> _tags;
 
@@ -12,18 +13,24 @@ class DBIngredientController extends ChangeNotifier {
   List<SpecificUnitModel> _specificUnitOptions = [];
 
   DBIngredientController(DBIngredientModel model, this.parent) {
-    _name = model.name;
-    _tags = [];
+    _id = model.id;
+    _name = model.singular;
     _plural = model.plural;
     _category = model.category;
     _cookingUnit = "?";
     _portionUnit = "?";
+    _tags = [];
 
     _categoryOptions = [];
     fillCategoryOptions();
   }
 
-  DBIngredientController.empty(this.parent);
+  DBIngredientController.empty(this.parent) {
+    _id = IDModel.nil();
+    _tags = [];
+    _categoryOptions = [];
+    fillCategoryOptions();
+  }
 
   String get name => _name;
 
@@ -33,11 +40,11 @@ class DBIngredientController extends ChangeNotifier {
 
   List<String> get measurementTypeOptions => [..._measurementTypeOptions];
 
-  List<String> get portionUnitOptions => _specificUnitOptions.map((m) => m.value).toList();
+  List<String> get portionUnitOptions => _specificUnitOptions.map((m) => m.singular).toList();
 
-  List<String> get cookingUnitOptions => _specificUnitOptions.map((m) => m.value).toList();
+  List<String> get cookingUnitOptions => _specificUnitOptions.map((m) => m.singular).toList();
 
-  List<String> get categoryOptions => _categoryOptions.map((m) => m.value).toList();
+  List<String> get categoryOptions => _categoryOptions.map((m) => m.name).toList();
 
   Future<void> fillCategoryOptions() async {
     _categoryOptions = await ParentService.database.getIngredientCategories();
@@ -46,7 +53,7 @@ class DBIngredientController extends ChangeNotifier {
 
   int get categoryIndex {
     for (int i = 0; i < _categoryOptions.length; i++) {
-      if (_categoryOptions[i].value == _category) {
+      if (_categoryOptions[i].name == _category) {
         return i;
       }
     }
@@ -63,7 +70,7 @@ class DBIngredientController extends ChangeNotifier {
 
   int get cookingUnitIndex {
     for (int i = 0; i < _specificUnitOptions.length; i++) {
-      if (_categoryOptions[i].value == _cookingUnit) {
+      if (_categoryOptions[i].name == _cookingUnit) {
         return i;
       }
     }
@@ -72,7 +79,7 @@ class DBIngredientController extends ChangeNotifier {
 
   int get portionUnitIndex {
     for (int i = 0; i < _specificUnitOptions.length; i++) {
-      if (_categoryOptions[i].value == _portionUnit) {
+      if (_categoryOptions[i].name == _portionUnit) {
         return i;
       }
     }
@@ -85,6 +92,11 @@ class DBIngredientController extends ChangeNotifier {
 
   void onSave(BuildContext context) {
 
+  }
+
+  DBIngredientModel toModel() {
+    DBIngredientUnitModel unit = DBIngredientUnitModel("something", "somethings", "whole", "mass", {});
+    return DBIngredientModel(_id, _name, _plural, _category, unit);
   }
 
   void ingredientNameChanged(String newText) {
@@ -100,7 +112,7 @@ class DBIngredientController extends ChangeNotifier {
   }
 
   void categoryChanged(int x) {
-    _category = _categoryOptions[x].value;
+    _category = _categoryOptions[x].name;
   }
 
   void measurementTypeChanged(int x) {
@@ -108,10 +120,10 @@ class DBIngredientController extends ChangeNotifier {
   }
 
   void cookingUnitChanged(int x) {
-    _cookingUnit = _specificUnitOptions[x].value;
+    _cookingUnit = _specificUnitOptions[x].singular;
   }
 
   void portionUnitChanged(int x) {
-    _portionUnit = _specificUnitOptions[x].value;
+    _portionUnit = _specificUnitOptions[x].singular;
   }
 }

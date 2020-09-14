@@ -2,6 +2,7 @@ import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeStepController extends ChangeNotifier {
   final RecipeController parent;
+  IDModel _id;
   int _step;
   String _directions;
   List<RecipeStepIngredientController> _ingredients;
@@ -15,6 +16,7 @@ class RecipeStepController extends ChangeNotifier {
   }
 
   RecipeStepController(RecipeStepModel rs, this.parent) {
+    _id = rs.id;
     _step = rs.step;
     _directions = rs.directions;
     _ingredients = rs.ingredients
@@ -26,6 +28,7 @@ class RecipeStepController extends ChangeNotifier {
   }
 
   RecipeStepController.empty(int step, this.parent) {
+    _id = IDModel.nil();
     _step = step;
     _directions = "";
     _ingredients = [];
@@ -40,9 +43,7 @@ class RecipeStepController extends ChangeNotifier {
   List<RecipeStepIngredientController> get ingredients => [..._ingredients];
 
   RecipeStepModel toModel() {
-    List<StepIngredientModel> ingredients =
-        _ingredients.map((c) => c.toModel()).toList();
-    return RecipeStepModel(IDModel.nil(), _directions, _step, ingredients);
+    return RecipeStepModel(_id, _directions, _step, _ingredients.map<StepIngredientModel>((c) => c.toModel()).toList());
   }
 
   void onAddIngredient() {

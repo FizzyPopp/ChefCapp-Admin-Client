@@ -1,20 +1,18 @@
 import 'package:chef_capp_admin_client/index.dart';
-part 'ingredient_category_model.g.dart';
-
-@JsonSerializable()
 class IngredientCategoryModel implements EqualsInterface {
-  final String _value;
+  final String _name;
 
-  IngredientCategoryModel(String value) : this._value = value;
+  IngredientCategoryModel(String name) : this._name = name;
 
-  String get value => _value;
+  String get name => _name;
 
   bool equals(var other) {
     if (other is! IngredientCategoryModel) return false;
-    return other.value == this.value;
+    return (other as IngredientCategoryModel).name == this.name;
   }
 
-  factory IngredientCategoryModel.fromJson(Map<String, dynamic> json) => _$IngredientCategoryModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$IngredientCategoryModelToJson(this);
+  @override
+  String toString() {
+    return _name;
+  }
 }

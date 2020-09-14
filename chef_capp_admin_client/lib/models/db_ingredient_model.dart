@@ -1,67 +1,95 @@
 import 'package:chef_capp_admin_client/index.dart';
-part 'db_ingredient_model.g.dart';
 
-// JSON SERIALIZATION WILL NOT WORK
-// because id != "...", id will equal some nested thing
+// singular + plural interface?
 
-@JsonSerializable()
-class DBIngredientModel implements EqualsInterface {
-  // may need a heck of a lot more fields to fully describe an ingredient
+class DBIngredientModel {
   final IDModel _id;
-  final String _name;
+  final String _singular;
   final String _plural;
-  final Map<String, dynamic> _unit;
   final String _category;
+  final DBIngredientUnitModel _unit;
 
-  DBIngredientModel(IDModel id, String name, String plural, Map<String, dynamic> unit, String category) :
+  DBIngredientModel(IDModel id, String singular, String plural, String category, DBIngredientUnitModel unit) :
         this._id = id,
-        this._name = name,
+        this._singular = singular,
         this._plural = plural,
-        this._unit = unit,
-        this._category = category;
+        this._category = category,
+        this._unit = unit;
 
   IDModel get id => _id;
 
-  String get name => _name;
+  String get singular => _singular;
 
   String get plural => _plural;
 
-  Map<String, dynamic> get unit => _unit; // BAD
-
   String get category => _category;
+
+  DBIngredientUnitModel get unit => _unit;
 
   bool equals(var other) {
     if (other is! DBIngredientModel) return false;
-    return this.id == other.id;
+    return (other as DBIngredientModel).id.equals(this.id);
   }
 
-  factory DBIngredientModel.fromJson(Map<String, dynamic> json) => _$DBIngredientModelFromJson(json);
+  static DBIngredientModel fromDB(Map<String, dynamic> data) {
+    String plural = (data["name"]["plural"] ?? data["name"]["plural"]);
+    return DBIngredientModel(IDModel(data["id"]), data["name"]["singular"], plural, data["category"], DBIngredientUnitModel.fromDB(data["unit"]));
+  }
 
-  Map<String, dynamic> toJson() => _$DBIngredientModelToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      "id": _id.toString(),
+      "type": "ingredient",
+      "name": {
+        "singular": _singular,
+        "plural": _plural
+      },
+      "category": _category,
+      "unit": _unit.toJson()
+    };
+  }
+}
 
-  static DBIngredientModel fromDB(data) {
-    // sanitize
-    if (data["id"] == null || data["id"] == "") {
-      throw ("bad id");
-    }
-    if (data["name"] == null ||
-        data["name"] is! Map ||
-        data["name"]["singular"] == null ||
-        data["name"]["singular"] == "") {
-      throw ("bad name");
-    }
-    if (data["unit"] == null) {
-      throw ("bad unit");
-    }
+class DBIngredientUnitModel {
+  final String _singular;
+  final String _plural;
+  final String _unitCategory; // whole, specific, SI
+  final String _measurementType; // mass, volume
+  final Map<String, double> _conversionFactorTo;
 
-    // parse
-    Map unit = data["unit"];
-    String name = data["name"]["singular"];
-    String plural = (data["name"]["plural"] ?? name);
+  DBIngredientUnitModel(String singular, String plural, String unitCategory, String measurementType, Map<String, dynamic> conversionFactorTo) :
+      this._singular = singular,
+      this._plural = plural,
+      this._unitCategory = unitCategory,
+      this._measurementType = measurementType,
+      this._conversionFactorTo = conversionFactorTo;
 
-    // TODO: get category
+  String get singular => _singular;
 
-    // return
-    return DBIngredientModel(IDModel(data["id"]), name, plural, unit, "A Category");
+  String get plural => _plural;
+
+  String get unitCategory => unitCategory;
+
+  String get measurementType => _measurementType;
+
+  Map<String, double> get conversionFactorTo => {..._conversionFactorTo};
+
+  static DBIngredientUnitModel fromDB(Map<String, dynamic> data) {
+    String plural = (data["plural"] ?? data["singular"]);
+    Map<String, double> conversionFactorTo = Map<String, double>();
+    data["conversionFactorTo"].forEach((k, v) {
+      conversionFactorTo[k] = v;
+    });
+    return DBIngredientUnitModel(data["singular"], plural, data["unitCategory"], data["measurementType"], conversionFactorTo);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "singular": _singular,
+      "plural": _plural,
+      "unitCategory": _unitCategory,
+      "measurementType": _measurementType,
+      "conversionFactorTo": _conversionFactorTo
+    };
   }
 }

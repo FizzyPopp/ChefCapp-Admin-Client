@@ -24,9 +24,9 @@ class ValidList<T> {
 
   List<T> get data {
     if (_isSet) {
-      return [];
-    } else {
       return [..._data];
+    } else {
+      return [];
     }
   }
 }

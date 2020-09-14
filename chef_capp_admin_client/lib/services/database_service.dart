@@ -48,13 +48,11 @@ class DatabaseService {
 
     await init();
 
-    QuerySnapshot qSnapshot = await FirebaseFirestore.instance.collection('ingredients').get();
+    QuerySnapshot qSnapshot = await FirebaseFirestore.instance.collection('ingredient').get();
 
     List<DBIngredientModel> out = [];
     for (DocumentSnapshot ds in qSnapshot.docs) {
-      if (ds.id != "metadata") {
-        out.add(DBIngredientModel.fromDB(ds.data()));
-      }
+      out.add(DBIngredientModel.fromDB(ds.data()));
     }
 
     cache.ingredients.data = out;
@@ -68,9 +66,9 @@ class DatabaseService {
 
     await init();
 
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredient-metadata').doc('categories').get();
 
-    cache.ingredientCategories.data = snapshot.data()['categories'].map<IngredientCategoryModel>((cat) => IngredientCategoryModel(cat)).toList();
+    cache.ingredientCategories.data = snapshot.data()["keys"].map<IngredientCategoryModel>((cat) => IngredientCategoryModel(cat)).toList();
     return cache.ingredientCategories.data;
   }
 
@@ -81,9 +79,15 @@ class DatabaseService {
 
     await init();
 
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredients').doc('metadata').get();
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('ingredient-metadata').doc('specific-units').get();
 
-    cache.specificUnits.data = snapshot.data()['specific-units'].map<SpecificUnitModel>((unit) => SpecificUnitModel(unit)).toList();
+    List<String> keys = snapshot.data()["keys"].map<String>((v) => v.toString()).toList();
+    List<SpecificUnitModel> out = [];
+    for (String k in keys) {
+      out.add(SpecificUnitModel.fromDB(k, snapshot.data()[k]));
+    }
+
+    cache.specificUnits.data = out;
     return cache.specificUnits.data;
   }
 
@@ -94,7 +98,7 @@ class DatabaseService {
 
     await init();
 
-    QuerySnapshot qSnapshot = await FirebaseFirestore.instance.collection('recipes').get();
+    QuerySnapshot qSnapshot = await FirebaseFirestore.instance.collection('recipe').get();
 
     List<RecipeModel> out = [];
     for (DocumentSnapshot ds in qSnapshot.docs) {

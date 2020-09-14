@@ -1,7 +1,10 @@
 import 'package:chef_capp_admin_client/index.dart';
-part 'recipe_model.g.dart';
 
-@JsonSerializable()
+// when saving a recipe:
+// push recipe and list of steps to "stamper" -> get back a full recipe
+// then that full recipe will get validated
+// so the "toJson()" function is really not meant for validation
+
 class RecipeModel implements EqualsInterface {
   final IDModel _id;
   final String _title;
@@ -40,10 +43,23 @@ class RecipeModel implements EqualsInterface {
 
   bool equals(var other) {
     if (other is! RecipeModel) return false;
-    return other.id.equals(this.id);
+    return (other as RecipeModel).id.equals(this.id);
   }
 
-  factory RecipeModel.fromJson(Map<String, dynamic> json) => _$RecipeModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RecipeModelToJson(this);
+  Map<String, dynamic> toJson() {
+    return {
+      "id": _id.toString(),
+      "type": "recipe",
+      "name": {
+        "singular": _title
+      },
+      "tags": [],
+      "time": {
+        "prepare": _prepTime,
+        "cook": _cookTime,
+      },
+      "ingredients": {"keys": []},
+      "components": []
+    };
+  }
 }

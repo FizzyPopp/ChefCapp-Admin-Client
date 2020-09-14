@@ -484,24 +484,19 @@ class RecipeStep extends StatelessWidget {
               Expanded(
                 child: Consumer<RecipeStepIngredientController>(
                   builder: (context, controller, _) {
-                    return DropdownButtonFormField(
+                    return DropdownButtonFormField<String>(
                       key: UniqueKey(),
+                      value: controller.unitCategory,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                       ),
-                      items: <DropdownMenuItem>[
-                        DropdownMenuItem(
-                          child: Text('Verbiage'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Item'),
-                        ),
-                      ],
-                      onChanged: (x) {
-                        controller.verbiageChanged(x);
+                      items: RecipeStepIngredientController.unitCategories.map<DropdownMenuItem<String>>(
+                              (s) => DropdownMenuItem<String>(
+                                  value: s,
+                                  child: Text(s)
+                              )).toList(),
+                      onChanged: (String x) {
+                        controller.unitCategoryChanged(x);
                       },
                     );
                   },
@@ -531,23 +526,26 @@ class RecipeStep extends StatelessWidget {
               Expanded(
                 child: Consumer<RecipeStepIngredientController>(
                     builder: (context, controller, _) {
-                  return DropdownButtonFormField(
+                  return DropdownButtonFormField<String>(
                     key: UniqueKey(),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                     ),
-                    items: <DropdownMenuItem>[
-                      DropdownMenuItem(
-                        child: Text('Unit'),
+                    items: <DropdownMenuItem<String>>[
+                      DropdownMenuItem<String>(
+                        value: "Unit",
+                        child: Text("Unit"),
                       ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
+                      DropdownMenuItem<String>(
+                        value: "Item 2",
+                        child: Text('Item 2'),
                       ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
+                      DropdownMenuItem<String>(
+                        value: "Item 3",
+                        child: Text('Item 3'),
                       ),
                     ],
-                    onChanged: (x) {
+                    onChanged: (String x) {
                       controller.unitChanged(x);
                     },
                   );

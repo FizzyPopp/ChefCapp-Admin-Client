@@ -37,6 +37,10 @@ class DummyModels {
 
   static DBIngredientModel dbIngredient() {
     IDModel id = DummyModels.id();
-    return DBIngredientModel(id, "name $id", "plural $id", {}, "category $id");
+    return DBIngredientModel(id, "singular $id", "plural $id", "category $id", dbIngredientUnit());
+  }
+
+  static DBIngredientUnitModel dbIngredientUnit() {
+    return DBIngredientUnitModel("singular", "plural", "SI", "volume", {});
   }
 }

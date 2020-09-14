@@ -91,7 +91,7 @@ class IngredientsHome extends StatelessWidget {
       return DataRow(
         cells: <DataCell>[
           DataCell(Text(m.id.toString())),
-          DataCell(Text(m.name)),
+          DataCell(Text(m.singular)),
           DataCell(Text(m.category)),
         ],
         onSelectChanged: (x) {

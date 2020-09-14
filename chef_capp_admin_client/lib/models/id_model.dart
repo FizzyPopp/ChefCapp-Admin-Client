@@ -21,13 +21,14 @@ class IDModel implements EqualsInterface {
     return Uuid().v4();
   }
 
+  // use this if new to database
   static String nilUUID() {
     return "00000000-0000-0000-0000-000000000000";
   }
 
   bool equals(var other) {
     if (other is! IDModel) return false;
-    return other.value == this.value;
+    return (other as IDModel).value == this.value;
   }
 
   factory IDModel.fromJson(Map<String, dynamic> json) => _$IDModelFromJson(json);

@@ -1,19 +1,17 @@
 import 'package:chef_capp_admin_client/index.dart';
-part 'step_ingredient_model.g.dart';
 
-@JsonSerializable()
 class StepIngredientModel implements EqualsInterface {
   // may need a heck of a lot more fields to fully describe an ingredient
   final IDModel _id;
   final String _name;
-  final String _verbiage;
+  final String _unitCategory; // whole, specific, SI
   final double _quantity;
-  final String _unit;
+  final String _unit; // depends on unitCategory
 
-  StepIngredientModel(IDModel id, String name, String verbiage, double quantity, String unit) :
+  StepIngredientModel(IDModel id, String name, String unitCategory, double quantity, String unit) :
         this._id = id,
         this._name = name,
-        this._verbiage = verbiage,
+        this._unitCategory = unitCategory,
         this._quantity = quantity,
         this._unit = unit;
 
@@ -21,7 +19,7 @@ class StepIngredientModel implements EqualsInterface {
 
   String get name => _name;
 
-  String get verbiage => _verbiage;
+  String get unitCategory => _unitCategory;
 
   double get quantity => _quantity;
 
@@ -29,14 +27,10 @@ class StepIngredientModel implements EqualsInterface {
 
   bool equals(var other) {
     if (other is! StepIngredientModel) return false;
-    return this.id == other.id;
+    return (other as StepIngredientModel).id.equals(this.id);
   }
 
   static StepIngredientModel fromDB(data) {
     return null;
   }
-
-  factory StepIngredientModel.fromJson(Map<String, dynamic> json) => _$StepIngredientModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$StepIngredientModelToJson(this);
 }

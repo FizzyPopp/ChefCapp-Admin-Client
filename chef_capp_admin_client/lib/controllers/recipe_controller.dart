@@ -51,6 +51,19 @@ class RecipeController extends ChangeNotifier {
     // send to validator
   }
 
+  RecipeModel toModel() {
+    if ((int.tryParse(_yield) ?? -1) < 0) {
+      return null;
+    }
+    if ((int.tryParse(_prepTime) ?? -1) < 0) {
+      return null;
+    }
+    if ((int.tryParse(_cookTime) ?? -1) < 0) {
+      return null;
+    }
+    return RecipeModel(IDModel(_id), _recipeName, int.parse(_yield), int.parse(_prepTime), int.parse(_cookTime), _steps.map<RecipeStepModel>((c) => c.toModel()).toList(), _status);
+  }
+
   void onPublish(BuildContext context) {
     // send to db
   }
