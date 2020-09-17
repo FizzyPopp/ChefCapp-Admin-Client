@@ -1,25 +1,19 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class DBIngredientListController extends ChangeNotifier {
-
-  List<DBIngredientModel> _ingredients;
-  bool _haveIngredients;
+  List<DBIngredientModel> _ingredients = [];
 
   DBIngredientListController() {
-    _haveIngredients = false;
-    _ingredients = [];
-    //fillIngredients();
+    //setIngredients();
 
     // testing
     _ingredients = [DummyModels.dbIngredient(), DummyModels.dbIngredient()];
-    _haveIngredients = true;
   }
 
   List<DBIngredientModel> get ingredients => [..._ingredients];
 
-  Future<void> fillIngredients() async {
+  Future<void> setIngredients() async {
     _ingredients = await ParentService.database.getIngredients();
-    _haveIngredients = true;
     notifyListeners();
   }
 
@@ -31,9 +25,6 @@ class DBIngredientListController extends ChangeNotifier {
   }
 
   void onEdit(BuildContext context, DBIngredientModel m) {
-    if (!_haveIngredients) {
-      return;
-    }
     showDialog(
       context: context,
       builder: (_) => IngredientAdd(DBIngredientController(m, this)),

@@ -490,7 +490,7 @@ class RecipeStep extends StatelessWidget {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                       ),
-                      items: RecipeStepIngredientController.unitCategories.map<DropdownMenuItem<String>>(
+                      items: controller.unitCategories.map<DropdownMenuItem<String>>(
                               (s) => DropdownMenuItem<String>(
                                   value: s,
                                   child: Text(s)

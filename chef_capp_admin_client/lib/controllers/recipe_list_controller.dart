@@ -1,24 +1,25 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeListController extends ChangeNotifier {
-  List<RecipeModel> _recipes;
-  bool _haveRecipes;
+  List<RecipeModel> _recipes = [];
 
   RecipeListController() {
-    _haveRecipes = false;
-    _recipes = [];
-    //fillRecipes();
+    //setRecipes();
+    ParentService.database.getIngredients(); // might as well, we're going to need them later
 
     // testing
     _recipes = [DummyModels.recipe(), DummyModels.recipe()];
-    _haveRecipes = true;
+  }
+
+  void setRecipes() async {
+    _recipes = await ParentService.database.getRecipes();
+    notifyListeners();
   }
 
   List<RecipeModel> get recipes => [..._recipes];
 
   Future<void> fillRecipes() async {
     _recipes = await ParentService.database.getRecipes();
-    _haveRecipes = true;
     notifyListeners();
   }
 
@@ -30,9 +31,6 @@ class RecipeListController extends ChangeNotifier {
   }
 
   void onEdit(BuildContext context, RecipeModel model) {
-    if (!_haveRecipes) {
-      return;
-    }
     Navigator.push(
       context,
       FadeRoute(page: RecipePage(RecipeController(model, this))),

@@ -1,14 +1,17 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeStepIngredientController extends ChangeNotifier {
+  List<DBIngredientModel> _allIngredients = [];
   final RecipeStepController _parent;
   final int fakeID;
   IDModel _id;
   // verbiage and unit should really be lists
   String _name, _unitCategory, _quantity, _unit;
-  static const List<String> unitCategories = ["whole", "specific", "SI"];
-  List<String> _unitOptions;
-
+  static const List<String> _unitCategories = ["whole", "specific", "SI"];
+  List<String> _unitOptions = [];
+  // this depends on the measurement type of the ingredient, but it might work for MVP
+  static const List<String> _SI = ["g", "kg", "lb", "ml", "L", "cup"];
+  List<String> _specific = [];
 
   RecipeStepIngredientController(StepIngredientModel ingredient, this.fakeID, this._parent) {
     _id = ingredient.id;
@@ -16,7 +19,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
     _unitCategory = ingredient.unitCategory;
     _quantity = ingredient.quantity.toString();
     _unit = ingredient.unit;
-    _unitOptions = getUnitOptions();
+    setSpecific();
   }
 
   RecipeStepIngredientController.empty(this.fakeID, this._parent) {
@@ -25,7 +28,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
     _unitCategory = "";
     _quantity = "";
     _unit = "";
-    _unitOptions = getUnitOptions();
+    setSpecific();
   }
 
   StepIngredientModel toModel() {
@@ -39,6 +42,18 @@ class RecipeStepIngredientController extends ChangeNotifier {
   String get unitCategory => _unitCategory;
   String get quantity => _quantity;
   String get unit => _unit;
+  List<String> get unitCategories => [..._unitCategories];
+  List<String> get unitOptions => [..._unitOptions];
+
+  void setSpecific() async {
+    _specific = (await ParentService.database.getSpecificUnits()).map<String>((m) => m.toString()).toList();
+    setUnitOptions();
+    notifyListeners();
+  }
+
+  void setAllIngredients() async {
+    _allIngredients = await ParentService.database.getIngredients();
+  }
 
   void searchIngredients(String newText) {
     // do something
@@ -46,7 +61,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
 
   void unitCategoryChanged(String x) {
     _unitCategory = x;
-    _unitOptions = getUnitOptions();
+    setUnitOptions();
   }
 
   void quantityChanged(String newText) {
@@ -59,17 +74,15 @@ class RecipeStepIngredientController extends ChangeNotifier {
 
   void onDelete() {
     _parent.deleteIngredient(this);
-    // do something
   }
 
-  List<String> getUnitOptions() {
+  void setUnitOptions() {
     if (_unitCategory == "whole") {
-      return [""];
+      _unitOptions = [""];
     } else if (_unitCategory == "specific") {
-      return [""]; //(await ParentService.database.getSpecificUnits()).map<String>((m) => m.toString()).toList();
+      _unitOptions = [..._specific]; //(await ParentService.database.getSpecificUnits()).map<String>((m) => m.toString()).toList();
     } else if (_unitCategory == "SI") {
-      // need to know measurement type
-      return ["kg", "L"];
+      _unitOptions = [..._SI];
     } else {
       throw("something went wrong");
     }
