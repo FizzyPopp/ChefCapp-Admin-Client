@@ -4,10 +4,10 @@ class DBIngredientListController extends ChangeNotifier {
   List<DBIngredientModel> _ingredients = [];
 
   DBIngredientListController() {
-    //setIngredients();
+    setIngredients();
 
     // testing
-    _ingredients = [DummyModels.dbIngredient(), DummyModels.dbIngredient()];
+    //_ingredients = [DummyModels.dbIngredient(), DummyModels.dbIngredient()];
   }
 
   List<DBIngredientModel> get ingredients => [..._ingredients];

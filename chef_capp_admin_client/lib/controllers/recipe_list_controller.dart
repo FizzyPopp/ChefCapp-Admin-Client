@@ -4,11 +4,11 @@ class RecipeListController extends ChangeNotifier {
   List<RecipeModel> _recipes = [];
 
   RecipeListController() {
-    //setRecipes();
+    setRecipes();
     ParentService.database.getIngredients(); // might as well, we're going to need them later
 
     // testing
-    _recipes = [DummyModels.recipe(), DummyModels.recipe()];
+    //_recipes = [DummyModels.recipe(), DummyModels.recipe()];
   }
 
   void setRecipes() async {

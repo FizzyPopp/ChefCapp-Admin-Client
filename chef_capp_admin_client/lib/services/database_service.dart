@@ -91,6 +91,7 @@ class DatabaseService {
     return cache.specificUnits.data;
   }
 
+  // streams?!
   Future<List<RecipeModel>> getRecipes() async {
     if (cache.recipes.isSet) {
       return cache.recipes.data;
@@ -109,6 +110,26 @@ class DatabaseService {
 
     cache.recipes.data = out;
     return cache.recipes.data;
+  }
+
+  Future<void> getRecipeSteps(RecipeModel recipe) async {
+    await init();
+
+    List<String> ids = recipe.steps.map<String>((s) => s.id.toString()).toList();
+    QuerySnapshot qs = await FirebaseFirestore.instance.collection('step').where('id', whereIn: ids).get();
+
+    if (qs.docs.length != ids.length) {
+      throw ("Did not fetch correct number of components from the DB");
+    }
+
+    List<RecipeStepModel> steps = [];
+    //print(qs.docs[0].data());
+    //steps.add(RecipeStepModel.fromDB(qs.docs[0].data(), 1));
+    for (int i = 0; i < ids.length; i++) {
+      steps.add(RecipeStepModel.fromDB(qs.docs[i].data(), i+1));
+    }
+
+    recipe.steps = steps;
   }
 }
 

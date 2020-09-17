@@ -1,20 +1,18 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class SpecificUnitModel implements EqualsInterface {
-  final String _singular;
-  final String _plural;
-  final List<IDModel> _usedIn;
+  final String singular;
+  final String plural;
+  List<IDModel> _usedIn;
 
   SpecificUnitModel(String singular, String plural, List<IDModel> usedIn) :
-        this._singular = singular,
-        this._plural = plural,
-        this._usedIn = usedIn;
-
-  String get singular => _singular;
-
-  String get plural => _plural;
+        this.singular = singular,
+        this.plural = plural,
+        this._usedIn = [...usedIn];
 
   List<IDModel> get usedIn => [..._usedIn];
+
+  set usedIn(List<IDModel> usedIn) => _usedIn = [...usedIn];
 
   bool equals(var other) {
     if (other is! SpecificUnitModel) return false;
@@ -25,7 +23,7 @@ class SpecificUnitModel implements EqualsInterface {
 
   @override
   String toString() {
-    return _singular;
+    return singular;
   }
 
   static SpecificUnitModel fromDB(String key, Map<String, dynamic> data) {
@@ -41,9 +39,9 @@ class SpecificUnitModel implements EqualsInterface {
   Map<String, dynamic> toJson() {
     List<String> usedIn = _usedIn.map<String>((id) => id.toString()).toList();
     return {
-      _singular: {
-        "plural": _plural,
-        "usedIn": usedIn
+      singular: {
+        "plural": plural,
+        "usedIn": _usedIn
       }
     };
   }

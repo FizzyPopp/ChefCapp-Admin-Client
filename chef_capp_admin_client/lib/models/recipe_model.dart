@@ -6,39 +6,34 @@ import 'package:chef_capp_admin_client/index.dart';
 // so the "toJson()" function is really not meant for validation
 
 class RecipeModel implements EqualsInterface {
-  final IDModel _id;
-  final String _title;
-  final int _yield;
-  final int _prepTime;
-  final int _cookTime;
-  final List<RecipeStepModel> _steps;
-  final String _status;
+  final IDModel id;
+  String title;
+  int yield;
+  int prepTime;
+  int cookTime;
+  List<RecipeStepModel> _steps;
+  String status;
 
   RecipeModel(IDModel id, String title, int yield, int prepTime, int cookTime, List<RecipeStepModel> steps, String status) :
-      this._id = id,
-      this._title = title,
-      this._yield = yield,
-      this._prepTime = prepTime,
-      this._cookTime = cookTime,
-      this._steps = steps,
-      this._status = status;
-
-  IDModel get id => _id;
-
-  String get title => _title;
-
-  int get yield => _yield;
-
-  int get prepTime => _prepTime;
-
-  int get cookTime => _cookTime;
+      this.id = id,
+      this.title = title,
+      this.yield = yield,
+      this.prepTime = prepTime,
+      this.cookTime = cookTime,
+      this._steps = [...steps],
+      this.status = status;
 
   List<RecipeStepModel> get steps => [..._steps];
 
-  String get status => _status;
+  set steps(List<RecipeStepModel> steps) => _steps = [...steps];
 
   static RecipeModel fromDB(data) {
-    return null;
+    // TODO: yield, steps, status
+    List<RecipeStepModel> steps = [];
+    for (int i = 0; i < data["components"].length; i++) {
+      steps.add(RecipeStepModel(IDModel(data["components"][i]), "", i+1, []));
+    }
+    return RecipeModel(IDModel(data["id"]), data["name"]["singular"], 0, data["time"]["prepare"], data["time"]["cook"], steps, "published");
   }
 
   bool equals(var other) {
@@ -48,15 +43,15 @@ class RecipeModel implements EqualsInterface {
 
   Map<String, dynamic> toJson() {
     return {
-      "id": _id.toString(),
+      "id": id.toString(),
       "type": "recipe",
       "name": {
-        "singular": _title
+        "singular": title
       },
       "tags": [],
       "time": {
-        "prepare": _prepTime,
-        "cook": _cookTime,
+        "prepare": prepTime,
+        "cook": cookTime,
       },
       "ingredients": {"keys": []},
       "components": []

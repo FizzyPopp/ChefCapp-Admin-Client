@@ -7,10 +7,10 @@ class RecipeStepIngredientController extends ChangeNotifier {
   IDModel _id;
   // verbiage and unit should really be lists
   String _name, _unitCategory, _quantity, _unit;
-  static const List<String> _unitCategories = ["whole", "specific", "SI"];
+  static const List<String> unitCategories = ["whole", "specific", "SI"];
   List<String> _unitOptions = [];
   // this depends on the measurement type of the ingredient, but it might work for MVP
-  static const List<String> _SI = ["g", "kg", "lb", "ml", "L", "cup"];
+  static const List<String> SI = ["g", "kg", "lb", "ml", "L", "cup"];
   List<String> _specific = [];
 
   RecipeStepIngredientController(StepIngredientModel ingredient, this.fakeID, this._parent) {
@@ -25,7 +25,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
   RecipeStepIngredientController.empty(this.fakeID, this._parent) {
     _id = IDModel.nil();
     _name = "";
-    _unitCategory = "";
+    _unitCategory = "whole";
     _quantity = "";
     _unit = "";
     setSpecific();
@@ -42,7 +42,6 @@ class RecipeStepIngredientController extends ChangeNotifier {
   String get unitCategory => _unitCategory;
   String get quantity => _quantity;
   String get unit => _unit;
-  List<String> get unitCategories => [..._unitCategories];
   List<String> get unitOptions => [..._unitOptions];
 
   void setSpecific() async {
@@ -78,13 +77,13 @@ class RecipeStepIngredientController extends ChangeNotifier {
 
   void setUnitOptions() {
     if (_unitCategory == "whole") {
-      _unitOptions = [""];
+      _unitOptions = [];
     } else if (_unitCategory == "specific") {
       _unitOptions = [..._specific]; //(await ParentService.database.getSpecificUnits()).map<String>((m) => m.toString()).toList();
     } else if (_unitCategory == "SI") {
-      _unitOptions = [..._SI];
+      _unitOptions = SI;
     } else {
-      throw("something went wrong");
+      _unitOptions = [];
     }
   }
 }

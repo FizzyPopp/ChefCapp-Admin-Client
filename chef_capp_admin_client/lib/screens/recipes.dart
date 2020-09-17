@@ -484,13 +484,14 @@ class RecipeStep extends StatelessWidget {
               Expanded(
                 child: Consumer<RecipeStepIngredientController>(
                   builder: (context, controller, _) {
+                    // if no options, display a fake option?
                     return DropdownButtonFormField<String>(
                       key: UniqueKey(),
                       value: controller.unitCategory,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                       ),
-                      items: controller.unitCategories.map<DropdownMenuItem<String>>(
+                      items: RecipeStepIngredientController.unitCategories.map<DropdownMenuItem<String>>(
                               (s) => DropdownMenuItem<String>(
                                   value: s,
                                   child: Text(s)

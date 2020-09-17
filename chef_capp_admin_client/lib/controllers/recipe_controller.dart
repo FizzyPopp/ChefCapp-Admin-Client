@@ -11,8 +11,9 @@ class RecipeController extends ChangeNotifier {
     _yield = model.yield.toString();
     _prepTime = model.prepTime.toString();
     _cookTime = model.cookTime.toString();
-    _steps = model.steps.map((s) => RecipeStepController(s, this)).toList();
+    _steps = [];
     _status = model.status;
+    setSteps(model);
   }
 
   RecipeController.empty(this.parent) {
@@ -38,6 +39,12 @@ class RecipeController extends ChangeNotifier {
   List<RecipeStepController> get steps => [..._steps];
 
   String get status => _status;
+
+  Future<void> setSteps(RecipeModel model) async {
+    await ParentService.database.getRecipeSteps(model);
+    _steps = model.steps.map((s) => RecipeStepController(s, this)).toList();
+    notifyListeners();
+  }
 
   void onRecipesCrumb(BuildContext context) {
     Navigator.pop(context);
@@ -98,11 +105,11 @@ class RecipeController extends ChangeNotifier {
   void moveStepUp(RecipeStepController step) {
       if (step.step > 1) {
         _steps.insert(step.step - 2, _steps.removeAt(step.step - 1));
-        setSteps();
+        setStepNumbers();
         notifyListeners();
       } else {
         _steps.add(_steps.removeAt(0));
-        setSteps();
+        setStepNumbers();
         notifyListeners();
       }
   }
@@ -110,23 +117,23 @@ class RecipeController extends ChangeNotifier {
   bool moveStepDown(RecipeStepController step) {
     if (step.step < _steps.length) {
       _steps.insert(step.step, _steps.removeAt(step.step - 1));
-      setSteps();
+      setStepNumbers();
       notifyListeners();
     } else {
       _steps.insert(0, _steps.removeAt(_steps.length - 1));
-      setSteps();
+      setStepNumbers();
       notifyListeners();
     }
   }
 
   bool deleteStep(RecipeStepController step) {
     _steps.removeAt(step.step - 1);
-    setSteps();
+    setStepNumbers();
     notifyListeners();
     print("deleted step");
   }
 
-  void setSteps() {
+  void setStepNumbers() {
     for (int i = 0; i < _steps.length; i++) {
       _steps[i].step = (i+1);
     }
