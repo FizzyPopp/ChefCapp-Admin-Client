@@ -55,7 +55,14 @@ class RecipeStepIngredientController extends ChangeNotifier {
   }
 
   void searchIngredients(String newText) {
-    // do something
+    List<DBIngredientModel> results = [];
+    for (DBIngredientModel m in _allIngredients) {
+      if (m.singular.contains(newText)) {
+        results.add(m);
+      }
+    }
+
+
   }
 
   void unitCategoryChanged(String x) {

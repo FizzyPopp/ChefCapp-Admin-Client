@@ -20,16 +20,17 @@ class DBIngredientController extends ChangeNotifier {
     _cookingUnit = "?";
     _portionUnit = "?";
     _tags = [];
-
     _categoryOptions = [];
-    fillCategoryOptions();
+    setCategoryOptions();
+    setSpecificUnitOptions();
   }
 
   DBIngredientController.empty(this.parent) {
     _id = IDModel.nil();
     _tags = [];
     _categoryOptions = [];
-    fillCategoryOptions();
+    setCategoryOptions();
+    setSpecificUnitOptions();
   }
 
   String get name => _name;
@@ -46,7 +47,12 @@ class DBIngredientController extends ChangeNotifier {
 
   List<String> get categoryOptions => _categoryOptions.map((m) => m.name).toList();
 
-  Future<void> fillCategoryOptions() async {
+  Future<void> setSpecificUnitOptions() async {
+    _specificUnitOptions = await ParentService.database.getSpecificUnits();
+    notifyListeners();
+  }
+
+  Future<void> setCategoryOptions() async {
     _categoryOptions = await ParentService.database.getIngredientCategories();
     notifyListeners();
   }
@@ -87,15 +93,16 @@ class DBIngredientController extends ChangeNotifier {
   }
 
   void onDelete(BuildContext context) {
-
+    print("delete ingredient");
   }
 
   void onSave(BuildContext context) {
-
+    print(toModel().toJson());
   }
 
   DBIngredientModel toModel() {
-    DBIngredientUnitModel unit = DBIngredientUnitModel("something", "somethings", "whole", "mass", {});
+    String measurementType = (_volume) ? "volume" : "mass";
+    DBIngredientUnitModel unit = DBIngredientUnitModel("", "", "whole", measurementType, {});
     return DBIngredientModel(_id, _name, _plural, _category, unit);
   }
 

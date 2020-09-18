@@ -18,11 +18,6 @@ class RecipeListController extends ChangeNotifier {
 
   List<RecipeModel> get recipes => [..._recipes];
 
-  Future<void> fillRecipes() async {
-    _recipes = await ParentService.database.getRecipes();
-    notifyListeners();
-  }
-
   void onAddNew(BuildContext context) {
     Navigator.push(
       context,

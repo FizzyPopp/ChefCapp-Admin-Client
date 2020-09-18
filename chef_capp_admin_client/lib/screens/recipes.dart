@@ -318,8 +318,7 @@ class RecipePage extends StatelessWidget {
                                     child: RaisedButton(
                                       child: Text('ADD STEP'),
                                       onPressed: () {
-                                        print(
-                                            "add step button pressed on recipe edit page");
+                                        controller.newStep();
                                       },
                                     ),
                                   ),
@@ -466,15 +465,16 @@ class RecipeStep extends StatelessWidget {
                 child: Consumer<RecipeStepIngredientController>(
                   builder: (context, controller, _) {
                     return TextFormField(
-                        key: UniqueKey(),
-                        initialValue: controller.name,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Find an ingredient...',
-                        ),
-                        onChanged: (newText) {
-                          controller.searchIngredients(newText);
-                        });
+                      key: UniqueKey(),
+                      initialValue: controller.name,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Find an ingredient...',
+                      ),
+                      onChanged: (newText) {
+                        controller.searchIngredients(newText);
+                      },
+                    );
                   },
                 ),
               ),
@@ -491,11 +491,11 @@ class RecipeStep extends StatelessWidget {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                       ),
-                      items: RecipeStepIngredientController.unitCategories.map<DropdownMenuItem<String>>(
-                              (s) => DropdownMenuItem<String>(
-                                  value: s,
-                                  child: Text(s)
-                              )).toList(),
+                      items: RecipeStepIngredientController.unitCategories
+                          .map<DropdownMenuItem<String>>((s) =>
+                              DropdownMenuItem<String>(
+                                  value: s, child: Text(s)))
+                          .toList(),
                       onChanged: (String x) {
                         controller.unitCategoryChanged(x);
                       },

@@ -2,9 +2,7 @@ import 'package:chef_capp_admin_client/index.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 // flutter run -d chrome --web-hostname=127.0.0.1 --web-port=8200
-
 
 class ParentService {
   static AuthService _authService;
@@ -30,27 +28,6 @@ class ParentService {
 
     String url = _baseUrl + '/validate';
 
-    /*
-    var response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(data2),
-    );
-    print(response.body);
-     */
-
-
-    //print(DummyModels.dbIngredient().toJson());
-
-    /*
-    List<IngredientCategoryModel> ingredientCategories = await database.getIngredientCategories();
-    for (IngredientCategoryModel ic in ingredientCategories) {
-      print(ic);
-    }
-     */
-
     var recipeData = {
       "id": "f680874b-cb0b-4b25-ba74-a8ed39824202",
       "type": "recipe",
@@ -65,21 +42,31 @@ class ParentService {
     };
 
 
-    /*
-    List<DBIngredientModel> ingredients = await database.getIngredients();
-    for (DBIngredientModel ingr in ingredients) {
-      print(ingr.toJson());
-    }
-     */
+    DBIngredientModel ingredient = DummyModels.dbIngredient();
+    print(ingredient.toJson());
 
     var response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      //body: jsonEncode(ingredients[0].toJson()),
-      body: jsonEncode(recipeData)
+      //body: jsonEncode(recipeData)
+      body: jsonEncode(ingredient.toJson())
     );
     print(response.body);
+
+    url = _baseUrl + '/ingredient/add';
+    //print(url);
+
+    /*
+    response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(ingredient.toJson())
+    );
+    print(response.body);
+     */
   }
 }

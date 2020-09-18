@@ -39,3 +39,5 @@ export 'package:chef_capp_admin_client/controllers/recipe_step_controller.dart';
 export 'package:chef_capp_admin_client/controllers/recipe_step_ingredient_controller.dart';
 export 'package:chef_capp_admin_client/controllers/db_ingredient_list_controller.dart';
 export 'package:chef_capp_admin_client/controllers/recipe_list_controller.dart';
+export 'package:chef_capp_admin_client/controllers/unit_list_controller.dart';
+export 'package:chef_capp_admin_client/controllers/unit_controller.dart';

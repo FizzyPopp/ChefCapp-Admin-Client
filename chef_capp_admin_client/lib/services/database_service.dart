@@ -123,8 +123,6 @@ class DatabaseService {
     }
 
     List<RecipeStepModel> steps = [];
-    //print(qs.docs[0].data());
-    //steps.add(RecipeStepModel.fromDB(qs.docs[0].data(), 1));
     for (int i = 0; i < ids.length; i++) {
       steps.add(RecipeStepModel.fromDB(qs.docs[i].data(), i+1));
     }

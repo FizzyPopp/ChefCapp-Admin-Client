@@ -41,6 +41,6 @@ class DummyModels {
   }
 
   static DBIngredientUnitModel dbIngredientUnit() {
-    return DBIngredientUnitModel("singular", "plural", "SI", "volume", {});
+    return DBIngredientUnitModel("unit singular", "unit plural", "SI", "volume", {});
   }
 }

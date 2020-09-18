@@ -56,6 +56,7 @@ class RecipeController extends ChangeNotifier {
 
   void onSave(BuildContext context) {
     // send to validator
+    print(toModel().toJson());
   }
 
   RecipeModel toModel() {
@@ -95,9 +96,10 @@ class RecipeController extends ChangeNotifier {
     // ???
   }
 
-  RecipeStepController newStepController() {
+  RecipeStepController newStep() {
     RecipeStepController out = RecipeStepController.empty(_steps.length, this);
     _steps.add(out);
+    setStepNumbers();
     notifyListeners();
     return out;
   }

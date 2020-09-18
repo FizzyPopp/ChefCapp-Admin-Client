@@ -22,9 +22,11 @@ class RecipeStepController extends ChangeNotifier {
     _ingredients = rs.ingredients
         .map((m) => RecipeStepIngredientController(m, genFakeID(), this))
         .toList();
+    /*
     if (_ingredients.length == 0) {
       _ingredients = [RecipeStepIngredientController.empty(genFakeID(), this)];
     }
+     */
   }
 
   RecipeStepController.empty(int step, this.parent) {

@@ -188,7 +188,7 @@ class IngredientAdd extends StatelessWidget {
                             labelText: 'Tag',
                           ),
                           onChanged: (newText) {
-                            print(newText);
+                            //print(newText);
                             //controller.ingredientTagChanged(newText);
                           },
                         );
