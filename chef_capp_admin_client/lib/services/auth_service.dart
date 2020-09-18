@@ -7,7 +7,6 @@ class AuthService {
   auth.User _user;
 
   Future<bool> init() async {
-    await Firebase.initializeApp();
     if (_auth == null) {
       _auth = auth.FirebaseAuth.instance;
     }

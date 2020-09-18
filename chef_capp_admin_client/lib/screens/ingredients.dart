@@ -1,321 +1,415 @@
 import 'package:chef_capp_admin_client/index.dart';
+import 'package:provider/provider.dart';
 
 class IngredientsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MainAppBar(),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MainSideBar(),
-          Expanded(
-            child: Container(
-              color: Colors.grey[200],
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: xMargins),
-                child: ListView(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: xMargins,
-                        //vertical: xMargins / 2,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              FlatButton(
-                                //padding: EdgeInsets.symmetric(horizontal: 0.0),
-                                child: Text('Ingredients'),
-                                onPressed: () {
-
-                                },
-                              )
-                            ],
-                          ),
-                          RaisedButton(
-                            child: Text('ADD NEW INGREDIENT'),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => IngredientAdd(),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: xMargins,
-                        vertical: xMargins / 2,
-                      ),
-                      child: DataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text(
-                                'ID'
+    return ChangeNotifierProvider<DBIngredientListController>(
+      create: (_) => DBIngredientListController(),
+      child: Scaffold(
+        appBar: MainAppBar(),
+        body: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            MainSideBar(),
+            Expanded(
+              child: Container(
+                color: Colors.grey[200],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: xMargins),
+                  child: ListView(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: xMargins,
+                          //vertical: xMargins / 2,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                FlatButton(
+                                  //padding: EdgeInsets.symmetric(horizontal: 0.0),
+                                  child: Text('Ingredients'),
+                                  onPressed: null,
+                                )
+                              ],
                             ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                                'Name (Singular)'
+                            Consumer<DBIngredientListController>(
+                              builder: (context, controller, _) {
+                                return RaisedButton(
+                                  child: Text('ADD NEW INGREDIENT'),
+                                  onPressed: () {
+                                    controller.onAddNew(context);
+                                  },
+                                );
+                              },
                             ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                                'Category'
-                            ),
-                          ),
-                        ],
-                        showCheckboxColumn: false,
-                        rows: <DataRow>[
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('00001')),
-                              DataCell(Text('Unsalted butter')),
-                              DataCell(Text('Diary')),
-                            ],
-                            onSelectChanged: (x) {
-
-                            },
-                          ),
-                          DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('00002')),
-                              DataCell(Text('Salted Butter')),
-                              DataCell(Text('Dairy')),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Card(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: xMargins,
+                          vertical: xMargins / 2,
+                        ),
+                        child: Consumer<DBIngredientListController>(
+                            builder: (context, controller, _) {
+                          return DataTable(
+                            columns: <DataColumn>[
+                              DataColumn(
+                                label: Text('ID'),
+                              ),
+                              DataColumn(
+                                label: Text('Name (Singular)'),
+                              ),
+                              DataColumn(
+                                label: Text('Category'),
+                              ),
+                            ],
+                            showCheckboxColumn: false,
+                            rows: buildList(context, controller),
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  List<DataRow> buildList(
+      BuildContext context, DBIngredientListController controller) {
+    return controller.ingredients.map((m) {
+      return DataRow(
+        cells: <DataCell>[
+          DataCell(Text(m.id.toString())),
+          DataCell(Text(m.singular)),
+          DataCell(Text(m.category)),
+        ],
+        onSelectChanged: (x) {
+          controller.onEdit(context, m);
+        },
+      );
+    }).toList();
   }
 }
 
 class IngredientAdd extends StatelessWidget {
+  final DBIngredientController controller;
+
+  IngredientAdd(this.controller);
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(32.0),
-      child: Card(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: xMargins,
-              vertical: xMargins / 2,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: Text(
-                    'Add Ingredient',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Name (Singular)',
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Tag',
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Plural',
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                    items: <DropdownMenuItem>[
-                      DropdownMenuItem(
-                        child: Text('Category'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                    ],
-                    onChanged: (x) {
+    const mockResults = <AppProfile>[
+      AppProfile('John Doe', 'jdoe@flutter.io',
+          'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX4057996.jpg'),
+      AppProfile('Paul', 'paul@google.com',
+          'https://mbtskoudsalg.com/images/person-stock-image-png.png'),
+      AppProfile('Fred', 'fred@google.com',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Brian', 'brian@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('John', 'john@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Thomas', 'thomas@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Nelly', 'nelly@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Marie', 'marie@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Charlie', 'charlie@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Diana', 'diana@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Ernie', 'ernie@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Gina', 'fred@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+    ];
 
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: Text(
-                    'Unit Data for Ingredient',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Padding(
+        padding: EdgeInsets.all(32.0),
+        child: Card(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: xMargins,
+                vertical: xMargins / 2,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                    child: Text(
+                      'Add Ingredient',
+                      style: Theme.of(context).textTheme.headline5,
                     ),
-                    items: <DropdownMenuItem>[
-                      DropdownMenuItem(
-                        child: Text('SI unit'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                    ],
-                    onChanged: (x) {
-
-                    },
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                    items: <DropdownMenuItem>[
-                      DropdownMenuItem(
-                        child: Text('Cooking unit'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                    ],
-                    onChanged: (x) {
-
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                    items: <DropdownMenuItem>[
-                      DropdownMenuItem(
-                        child: Text('Portion unit'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                    ],
-                    onChanged: (x) {
-
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                    items: <DropdownMenuItem>[
-                      DropdownMenuItem(
-                        child: Text('Storage unit'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                    ],
-                    onChanged: (x) {
-
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                    items: <DropdownMenuItem>[
-                      DropdownMenuItem(
-                        child: Text('Bulk unit'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                      DropdownMenuItem(
-                        child: Text('Item'),
-                      ),
-                    ],
-                    onChanged: (x) {
-
-                    },
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RaisedButton(
-                      child: Text('Delete Ingredient'),
-                      onPressed: () {
-
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                    child: Consumer<DBIngredientController>(
+                      builder: (context, controller, _) {
+                        return TextFormField(
+                          key: UniqueKey(),
+                          initialValue: controller.name,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Name (Singular)',
+                          ),
+                          onChanged: (newText) {
+                            controller.ingredientNameChanged(newText);
+                          },
+                        );
                       },
                     ),
-                    SizedBox(width: xMargins,),
-                    RaisedButton(
-                      child: Text('Save'),
-                      onPressed: () {
-
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                    child: Consumer<DBIngredientController>(
+                      builder: (context, controller, _) {
+                        return TextFormField(
+                          key: UniqueKey(),
+                          initialValue: "",
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Tag',
+                          ),
+                          onChanged: (newText) {
+                            print(newText);
+                            //controller.ingredientTagChanged(newText);
+                          },
+                        );
                       },
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  Consumer<DBIngredientController>(
+                    builder: (context, controller, _) {
+                      return ChipsInput(
+                        allowChipEditing: false,
+                        findSuggestions: (String query) {
+                          if (query.length != 0) {
+                            var lowercaseQuery = query.toLowerCase();
+                            return mockResults.where((profile) {
+                              return profile.name.toLowerCase().contains(query.toLowerCase()) || profile.email.toLowerCase().contains(query.toLowerCase());
+                            }).toList(growable: false)
+                              ..sort((a, b) => a.name
+                                  .toLowerCase()
+                                  .indexOf(lowercaseQuery)
+                                  .compareTo(b.name.toLowerCase().indexOf(lowercaseQuery)));
+                          } else {
+                            return const <AppProfile>[];
+                          }
+                        },
+                        decoration: InputDecoration(
+                          labelText: "Tags",
+                        ),
+                        maxChips: 3,
+                        onChanged: (List<dynamic> data) {
+                          data = data.map((d) => d.toString()).toList();
+                          controller.ingredientTagsChanged(data);
+                        },
+                        chipBuilder: (context, state, profile) {
+                          return InputChip(
+                            key: ObjectKey(profile),
+                            label: Text(profile.name),
+                            avatar: CircleAvatar(
+                              backgroundImage: NetworkImage(profile.imageUrl),
+                            ),
+                            onDeleted: () => state.deleteChip(profile),
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          );
+                        },
+                        suggestionBuilder: (context, state, profile) {
+                          return ListTile(
+                            key: ObjectKey(profile),
+                            leading: CircleAvatar(
+                              backgroundImage: NetworkImage(profile.imageUrl),
+                            ),
+                            title: Text(profile.name),
+                            subtitle: Text(profile.email),
+                            onTap: () => state.selectSuggestion(profile),
+                          );
+                        },
+                      );
+                    }
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                    child: Consumer<DBIngredientController>(
+                      builder: (context, controller, _) {
+                        return TextFormField(
+                          key: UniqueKey(),
+                          initialValue: controller.plural,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Plural',
+                          ),
+                          onChanged: (newText) {
+                            controller.ingredientPluralChanged(newText);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                    child: Consumer<DBIngredientController>(
+                        builder: (context, controller, _) {
+                      return DropdownButtonFormField<int>(
+                        key: UniqueKey(),
+                        value: 0,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Categories',
+                        ),
+                        items: toDropMenuItems(controller.categoryOptions),
+                        onChanged: (int x) {
+                          controller.categoryChanged(x);
+                        },
+                      );
+                    }),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                    child: Text(
+                      'Unit Data for Ingredient',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                    child: Consumer<DBIngredientController>(
+                        builder: (context, controller, _) {
+                      return DropdownButtonFormField<int>(
+                        key: UniqueKey(),
+                        value: 0,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Measurement type',
+                        ),
+                        items:
+                            toDropMenuItems(controller.measurementTypeOptions),
+                        onChanged: (int x) {
+                          controller.measurementTypeChanged(x);
+                        },
+                      );
+                    }),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                    child: Consumer<DBIngredientController>(
+                        builder: (context, controller, _) {
+                      return DropdownButtonFormField<int>(
+                        key: UniqueKey(),
+                        value: 0,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Cooking unit',
+                        ),
+                        items: toDropMenuItems(controller.cookingUnitOptions),
+                        onChanged: (int x) {
+                          controller.cookingUnitChanged(x);
+                        },
+                      );
+                    }),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
+                    child: Consumer<DBIngredientController>(
+                        builder: (context, controller, _) {
+                      return DropdownButtonFormField<int>(
+                        key: UniqueKey(),
+                        value: 0,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Portion unit',
+                        ),
+                        items: toDropMenuItems(controller.portionUnitOptions),
+                        onChanged: (int x) {
+                          controller.portionUnitChanged(x);
+                        },
+                      );
+                    }),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Consumer<DBIngredientController>(
+                          builder: (context, controller, _) {
+                        return RaisedButton(
+                          child: Text('Delete Ingredient'),
+                          onPressed: () {
+                            controller.onDelete(context);
+                          },
+                        );
+                      }),
+                      SizedBox(
+                        width: xMargins,
+                      ),
+                      Consumer<DBIngredientController>(
+                          builder: (context, controller, _) {
+                        return RaisedButton(
+                          child: Text('Save'),
+                          onPressed: () {
+                            controller.onSave(context);
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  List<DropdownMenuItem<int>> toDropMenuItems(List<String> options) {
+    List<DropdownMenuItem<int>> out = [];
+    for (int i = 0; i < options.length; i++) {
+      out.add(DropdownMenuItem(
+        value: i,
+        child: Text(options[i]),
+      ));
+    }
+    return out;
+  }
+}
+
+class AppProfile {
+  final String name;
+  final String email;
+  final String imageUrl;
+
+  const AppProfile(this.name, this.email, this.imageUrl);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is AppProfile &&
+              runtimeType == other.runtimeType &&
+              name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
+
+  @override
+  String toString() {
+    return name;
   }
 }

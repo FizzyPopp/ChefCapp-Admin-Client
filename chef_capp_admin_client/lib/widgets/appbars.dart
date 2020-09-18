@@ -1,10 +1,6 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class MainAppBar extends StatelessWidget with PreferredSizeWidget {
-  final AuthService _auth;
-
-  MainAppBar() : _auth = AuthService();
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -19,7 +15,9 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
           child: RaisedButton(
             child: Text('SIGN IN'),
             onPressed: () {
-              _auth.test();
+              //_dbService.test();
+              //_auth.test();
+              ParentService.testValidate();
             },
           ),
         )
