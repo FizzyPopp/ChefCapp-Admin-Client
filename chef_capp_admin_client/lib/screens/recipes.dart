@@ -463,6 +463,9 @@ class RecipeStep extends StatelessWidget {
           builder: (context, snapshot) {
             return Row(children: [
               Expanded(
+                child: AutoField(),
+              ),
+              Expanded(
                 child: Consumer<RecipeStepIngredientController>(
                   builder: (context, controller, _) {
                     return TextFormField(
@@ -573,5 +576,98 @@ class RecipeStep extends StatelessWidget {
     }
 
     return out;
+  }
+}
+
+class AutoField extends StatefulWidget {
+  @override
+  _AutoFieldState createState() => _AutoFieldState();
+}
+
+class _AutoFieldState extends State<AutoField> {
+
+  final FocusNode _focusNode = FocusNode();
+
+  OverlayEntry _overlayEntry;
+
+  final LayerLink _layerLink = LayerLink();
+
+  @override
+  void initState() {
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+
+        this._overlayEntry = this._createOverlayEntry();
+        Overlay.of(context).insert(this._overlayEntry);
+
+      } else {
+        this._overlayEntry.remove();
+      }
+    });
+  }
+
+  OverlayEntry _createOverlayEntry() {
+
+    RenderBox renderBox = context.findRenderObject();
+    var size = renderBox.size;
+
+    return OverlayEntry(
+        builder: (context) => Positioned(
+          width: size.width,
+          child: CompositedTransformFollower(
+            link: this._layerLink,
+            showWhenUnlinked: false,
+            offset: Offset(0.0, size.height + 5.0),
+            child: Material(
+              elevation: 4.0,
+              child: ListView(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                children: <Widget>[
+                  ListTile(
+                    title: Text('Item 1'),
+                    onTap: () {
+                      print('Item 1 Tapped');
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Item 2'),
+                    onTap: () {
+                      print('Item 2 Tapped');
+                    },
+                  ),
+                  ListTile(
+                    //tileColor: Colors.green,
+                    leading: Icon(Icons.add),
+                    title: Text(
+                      'Add new ingredient to database',
+                      style: TextStyle(
+                        color: Colors.green
+                      ),
+                    ),
+                    onTap: () {
+                      print('Add a new ingredient');
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CompositedTransformTarget(
+      link: this._layerLink,
+      child: TextFormField(
+        focusNode: this._focusNode,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Find an ingredient...',
+        ),
+      ),
+    );
   }
 }
