@@ -433,7 +433,7 @@ class RecipeStep extends StatelessWidget {
                         key: UniqueKey(),
                         minLines: 3,
                         maxLines: 8,
-                        initialValue: controller.directions,
+                        initialValue: controller.instructions,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'Write your step directions here...'),
@@ -459,27 +459,9 @@ class RecipeStep extends StatelessWidget {
       out.add(
         ChangeNotifierProvider.value(
           value: rsic,
-          builder: (context, snapshot) {
-            return Row(children: [
+          child: Row(children: [
               Expanded(
-                child: AutoField(),
-              ),
-              Expanded(
-                child: Consumer<RecipeStepIngredientController>(
-                  builder: (context, controller, _) {
-                    return TextFormField(
-                      key: UniqueKey(),
-                      initialValue: controller.name,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Find an ingredient...',
-                      ),
-                      onChanged: (newText) {
-                        controller.searchIngredients(newText);
-                      },
-                    );
-                  },
-                ),
+                child: AutoField(rsic),
               ),
               SizedBox(
                 width: xMargins,
@@ -512,7 +494,9 @@ class RecipeStep extends StatelessWidget {
               Expanded(
                 child: Consumer<RecipeStepIngredientController>(
                   builder: (context, controller, _) {
-                    return TextField(
+                    return TextFormField(
+                      key: UniqueKey(),
+                      initialValue: controller.quantity,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Quantity',
@@ -569,8 +553,7 @@ class RecipeStep extends StatelessWidget {
                   );
                 },
               ),
-            ]);
-          },
+            ])
         ),
       );
     }
@@ -580,11 +563,18 @@ class RecipeStep extends StatelessWidget {
 }
 
 class AutoField extends StatefulWidget {
+
+  final RecipeStepIngredientController controller;
+
+  AutoField(this.controller);
+
   @override
-  _AutoFieldState createState() => _AutoFieldState();
+  _AutoFieldState createState() => _AutoFieldState(controller);
 }
 
 class _AutoFieldState extends State<AutoField> {
+
+  final RecipeStepIngredientController controller;
 
   final FocusNode _focusNode = FocusNode();
 
@@ -592,8 +582,11 @@ class _AutoFieldState extends State<AutoField> {
 
   final LayerLink _layerLink = LayerLink();
 
+  _AutoFieldState(this.controller);
+
   @override
   void initState() {
+    super.initState();
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
 
@@ -618,55 +611,73 @@ class _AutoFieldState extends State<AutoField> {
             link: this._layerLink,
             showWhenUnlinked: false,
             offset: Offset(0.0, size.height + 5.0),
-            child: Material(
-              elevation: 4.0,
-              child: ListView(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                children: <Widget>[
-                  ListTile(
-                    title: Text('Item 1'),
-                    onTap: () {
-                      print('Item 1 Tapped');
-                    },
+            child: ChangeNotifierProvider.value(
+              value: controller.optionsController,
+              child: Material(
+                  elevation: 4.0,
+                  child: Consumer<IngredientOptionsController>(
+                    builder: (context, controller, _) {
+                      return ListView(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        children: buildOptions(context, controller),
+                      );
+                    }
                   ),
-                  ListTile(
-                    title: Text('Item 2'),
-                    onTap: () {
-                      print('Item 2 Tapped');
-                    },
-                  ),
-                  ListTile(
-                    //tileColor: Colors.green,
-                    leading: Icon(Icons.add),
-                    title: Text(
-                      'Add new ingredient to database',
-                      style: TextStyle(
-                        color: Colors.green
-                      ),
-                    ),
-                    onTap: () {
-                      print('Add a new ingredient');
-                    },
-                  ),
-                ],
-              ),
+                )
             ),
           ),
         )
     );
   }
 
+  List<Widget> buildOptions(BuildContext context, IngredientOptionsController controller) {
+    List<Widget> out = [];
+    for (DBIngredientModel m in controller.options) {
+      out.add(ListTile(
+        title: Text(m.singular),
+        onTap: () {
+          controller.ingredientOptionTapped(m);
+        },
+      ));
+    }
+
+    out.add(ListTile(
+      //tileColor: Colors.green,
+      leading: Icon(Icons.add),
+      title: Text(
+        'add new',
+        style: TextStyle(
+            color: Colors.green
+        ),
+      ),
+      onTap: () {
+        print('Add a new ingredient');
+      },
+    ));
+
+    return out;
+  }
+
   @override
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
       link: this._layerLink,
-      child: TextFormField(
-        focusNode: this._focusNode,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Find an ingredient...',
-        ),
+      child: Consumer<RecipeStepIngredientController>(
+        builder: (context, controller, _) {
+          return TextFormField(
+            key: UniqueKey(),
+            controller: controller.fieldController,
+            focusNode: this._focusNode,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Find an ingredient...',
+            ),
+            onChanged: (newText) {
+              controller.searchIngredients(newText);
+            }
+          );
+        }
       ),
     );
   }

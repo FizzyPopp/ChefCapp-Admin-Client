@@ -4,7 +4,7 @@ class RecipeStepController extends ChangeNotifier {
   final RecipeController parent;
   IDModel _id;
   int _step;
-  String _directions;
+  String _instructions;
   List<RecipeStepIngredientController> _ingredients;
   Function genFakeID = fakeIDClosure();
 
@@ -18,7 +18,7 @@ class RecipeStepController extends ChangeNotifier {
   RecipeStepController(RecipeStepModel rs, this.parent) {
     _id = rs.id;
     _step = rs.step;
-    _directions = rs.directions;
+    _instructions = rs.instructions;
     _ingredients = rs.ingredients
         .map((m) => RecipeStepIngredientController(m, genFakeID(), this))
         .toList();
@@ -32,7 +32,7 @@ class RecipeStepController extends ChangeNotifier {
   RecipeStepController.empty(int step, this.parent) {
     _id = IDModel.nil();
     _step = step;
-    _directions = "";
+    _instructions = "";
     _ingredients = [];
   }
 
@@ -40,12 +40,12 @@ class RecipeStepController extends ChangeNotifier {
 
   set step(int i) => _step = i;
 
-  String get directions => _directions;
+  String get instructions => _instructions;
 
   List<RecipeStepIngredientController> get ingredients => [..._ingredients];
 
   RecipeStepModel toModel() {
-    return RecipeStepModel(_id, _directions, _step, _ingredients.map<StepIngredientModel>((c) => c.toModel()).toList());
+    return RecipeStepModel(_id, _instructions, _step, _ingredients.map<StepIngredientModel>((c) => c.toModel()).toList());
   }
 
   void onAddIngredient() {
@@ -63,7 +63,7 @@ class RecipeStepController extends ChangeNotifier {
   }
 
   void stepDirectionsChanged(String newText) {
-    _directions = newText;
+    _instructions = newText;
   }
 
   void onStepAction(stepPopupOptions x) {

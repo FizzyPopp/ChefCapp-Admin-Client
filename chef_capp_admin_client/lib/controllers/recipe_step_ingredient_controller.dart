@@ -1,7 +1,7 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeStepIngredientController extends ChangeNotifier {
-  List<DBIngredientModel> _allIngredients = [];
+  final IngredientOptionsController _ingredientOptionsController;
   final RecipeStepController _parent;
   final int fakeID;
   IDModel _id;
@@ -13,7 +13,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
   static const List<String> SI = ["g", "kg", "lb", "ml", "L", "cup"];
   List<String> _specific = [];
 
-  RecipeStepIngredientController(StepIngredientModel ingredient, this.fakeID, this._parent) {
+  RecipeStepIngredientController(StepIngredientModel ingredient, this.fakeID, this._parent) : _ingredientOptionsController = IngredientOptionsController(ingredient.name){
     _id = ingredient.id;
     _name = ingredient.name;
     _unitCategory = ingredient.unitCategory;
@@ -22,7 +22,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
     setSpecific();
   }
 
-  RecipeStepIngredientController.empty(this.fakeID, this._parent) {
+  RecipeStepIngredientController.empty(this.fakeID, this._parent) : _ingredientOptionsController = IngredientOptionsController("") {
     _id = IDModel.nil();
     _name = "";
     _unitCategory = "whole";
@@ -43,6 +43,9 @@ class RecipeStepIngredientController extends ChangeNotifier {
   String get quantity => _quantity;
   String get unit => _unit;
   List<String> get unitOptions => [..._unitOptions];
+  List<DBIngredientModel> get ingredientOptions => [..._ingredientOptionsController.options];
+  IngredientOptionsController get optionsController => _ingredientOptionsController;
+  TextEditingController get fieldController => _ingredientOptionsController.fieldController;
 
   void setSpecific() async {
     _specific = (await ParentService.database.getSpecificUnits()).map<String>((m) => m.toString()).toList();
@@ -50,19 +53,8 @@ class RecipeStepIngredientController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setAllIngredients() async {
-    _allIngredients = await ParentService.database.getIngredients();
-  }
-
   void searchIngredients(String newText) {
-    List<DBIngredientModel> results = [];
-    for (DBIngredientModel m in _allIngredients) {
-      if (m.singular.contains(newText)) {
-        results.add(m);
-      }
-    }
-
-
+    _ingredientOptionsController.searchIngredients(newText);
   }
 
   void unitCategoryChanged(String x) {
@@ -92,5 +84,37 @@ class RecipeStepIngredientController extends ChangeNotifier {
     } else {
       _unitOptions = [];
     }
+  }
+}
+
+class IngredientOptionsController extends ChangeNotifier {
+  List<DBIngredientModel> _allIngredients = [];
+  List<DBIngredientModel> _ingredientOptions = [];
+  final TextEditingController fieldController;
+
+  IngredientOptionsController(String initialValue) : fieldController = TextEditingController(text: initialValue) {
+    setAllIngredients();
+  }
+
+  List<DBIngredientModel> get options => [..._ingredientOptions];
+
+  void setAllIngredients() async {
+    _allIngredients = await ParentService.database.getIngredients();
+  }
+
+  void searchIngredients(String newText) {
+    _ingredientOptions = [];
+    if (newText != "") {
+      for (DBIngredientModel m in _allIngredients) {
+        if (m.singular.toLowerCase().contains(newText.toLowerCase())) {
+          _ingredientOptions.add(m);
+        }
+      }
+    }
+    notifyListeners();
+  }
+
+  void ingredientOptionTapped(DBIngredientModel model) {
+    fieldController.text = model.singular;
   }
 }
