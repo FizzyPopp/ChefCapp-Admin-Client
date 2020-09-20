@@ -57,4 +57,8 @@ class RecipeModel implements EqualsInterface {
       "components": []
     };
   }
+
+  Map<String, dynamic> stepsToJson() {
+    return {};
+  }
 }

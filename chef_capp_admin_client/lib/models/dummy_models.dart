@@ -32,15 +32,15 @@ class DummyModels {
 
   static StepIngredientModel stepIngredient() {
     IDModel id = DummyModels.id();
-    return StepIngredientModel(id, "name $id", "verbiage $id", double.parse(id.value), "unit $id");
+    return StepIngredientModel(id, "name $id", "plural $id", "verbiage $id", double.parse(id.value), "unit $id");
   }
 
   static DBIngredientModel dbIngredient() {
     IDModel id = DummyModels.id();
-    return DBIngredientModel(id, "singular $id", "plural $id", "category $id", dbIngredientUnit());
+    return DBIngredientModel(id, "singular $id", "plural $id", "bread and bakery", "volume", {"kitchen": dbIngredientUnit()});
   }
 
   static DBIngredientUnitModel dbIngredientUnit() {
-    return DBIngredientUnitModel("unit singular", "unit plural", "SI", "volume", {});
+    return DBIngredientUnitModel("unit singular", "unit plural", "SI", 1);
   }
 }

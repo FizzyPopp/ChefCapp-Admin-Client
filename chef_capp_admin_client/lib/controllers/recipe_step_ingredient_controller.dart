@@ -6,8 +6,8 @@ class RecipeStepIngredientController extends ChangeNotifier {
   final int fakeID;
   IDModel _id;
   // verbiage and unit should really be lists
-  String _name, _unitCategory, _quantity, _unit;
-  static const List<String> unitCategories = ["whole", "specific", "SI"];
+  String _name, _plural, _unitCategory, _quantity, _unit;
+  static const List<String> unitCategoryOptions = DBIngredientUnitController.unitCategoryOptions;
   List<String> _unitOptions = [];
   // this depends on the measurement type of the ingredient, but it might work for MVP
   static const List<String> SI = ["g", "kg", "lb", "ml", "L", "cup"];
@@ -16,20 +16,22 @@ class RecipeStepIngredientController extends ChangeNotifier {
   RecipeStepIngredientController(StepIngredientModel ingredient, this.fakeID, this._parent) {
     _id = ingredient.id;
     _name = ingredient.name;
+    _plural = ingredient.plural;
     _unitCategory = ingredient.unitCategory;
     _quantity = ingredient.quantity.toString();
     _unit = ingredient.unit;
-    _ingredientOptionsController = IngredientOptionsController(_name, _setId);
+    _ingredientOptionsController = IngredientOptionsController(_name, _update);
     setSpecific();
   }
 
   RecipeStepIngredientController.empty(this.fakeID, this._parent) {
     _id = IDModel.nil();
     _name = "";
+    _plural = "";
     _unitCategory = "whole";
     _quantity = "";
     _unit = "";
-    _ingredientOptionsController = IngredientOptionsController(_name, _setId);
+    _ingredientOptionsController = IngredientOptionsController(_name, _update);
     setSpecific();
   }
 
@@ -37,7 +39,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
     if ((double.tryParse(_quantity) ?? -1) <= 0) {
       return null;
     }
-    return StepIngredientModel(_id, _name, _unitCategory, double.parse(quantity), _unit);
+    return StepIngredientModel(_id, _name, _plural, _unitCategory, double.parse(quantity), _unit);
   }
 
   String get name => _name;
@@ -49,7 +51,11 @@ class RecipeStepIngredientController extends ChangeNotifier {
   IngredientOptionsController get optionsController => _ingredientOptionsController;
   TextEditingController get fieldController => _ingredientOptionsController.fieldController;
 
-  void _setId(IDModel id) => _id = id;
+  void _update(DBIngredientModel model) {
+    _id = model.id;
+    _name = model.singular;
+    _plural = model.plural;
+  }
 
   void setSpecific() async {
     _specific = (await ParentService.database.getSpecificUnits()).map<String>((m) => m.toString()).toList();
@@ -82,7 +88,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
     if (_unitCategory == "whole") {
       _unitOptions = [];
     } else if (_unitCategory == "specific") {
-      _unitOptions = [..._specific]; //(await ParentService.database.getSpecificUnits()).map<String>((m) => m.toString()).toList();
+      _unitOptions = [..._specific];
     } else if (_unitCategory == "SI") {
       _unitOptions = SI;
     } else {
@@ -95,9 +101,9 @@ class IngredientOptionsController extends ChangeNotifier {
   List<DBIngredientModel> _allIngredients = [];
   List<DBIngredientModel> _ingredientOptions = [];
   final TextEditingController fieldController;
-  final Function _setId;
+  final Function _updateParent;
 
-  IngredientOptionsController(String name, this._setId) : fieldController = TextEditingController(text: name) {
+  IngredientOptionsController(String name, this._updateParent) : fieldController = TextEditingController(text: name) {
     setAllIngredients();
   }
 
@@ -121,6 +127,6 @@ class IngredientOptionsController extends ChangeNotifier {
 
   void ingredientOptionTapped(DBIngredientModel model) {
     fieldController.text = model.singular;
-    _setId(model.id);
+    _updateParent(model);
   }
 }

@@ -2,42 +2,38 @@ import 'package:chef_capp_admin_client/index.dart';
 
 class DBIngredientController extends ChangeNotifier {
   final DBIngredientListController parent;
-  bool _volume;
   IDModel _id;
-  String _name, _plural, _category, _cookingUnit, _portionUnit;
-  List<String> _tags;
-
-  List<IngredientCategoryModel> _categoryOptions;
-
+  String _name, _plural, _category;
+  bool _volume; // what measurementType
+  List<IngredientCategoryModel> _categoryOptions= [];
+  Map<String, DBIngredientUnitController> _units = {
+    "cooking": DBIngredientUnitController.empty(),
+    "portion": DBIngredientUnitController.empty()
+  };
   final List<String> _measurementTypeOptions = ["mass", "volume"];
-  List<SpecificUnitModel> _specificUnitOptions = [];
 
   DBIngredientController(DBIngredientModel model, this.parent) {
     _id = model.id;
     _name = model.singular;
     _plural = model.plural;
     _category = model.category;
-    _cookingUnit = "?";
-    _portionUnit = "?";
-    _tags = [];
-    _categoryOptions = [];
-    _volume = (model.unit.measurementType == "volume");
-    setCategoryOptions();
-    setSpecificUnitOptions();
+    _volume = (model.measurementType == "volume");
+    model.units.forEach((String key, DBIngredientUnitModel value) {
+      _units[key] = DBIngredientUnitController(value.singular, value.plural, value.unitCategory, value.conversionFactorTo);
+    });
+    _setCategoryOptions();
   }
 
   DBIngredientController.empty(this.parent) {
     _id = IDModel.nil();
-    _tags = [];
-    _categoryOptions = [];
+    _name = "";
+    _plural = "";
+    _category = "";
     _volume = true;
-    setCategoryOptions();
-    setSpecificUnitOptions();
+    _setCategoryOptions();
   }
 
   String get name => _name;
-
-  List<String> get tags => [..._tags];
 
   String get plural => _plural;
 
@@ -52,18 +48,11 @@ class DBIngredientController extends ChangeNotifier {
 
   List<String> get measurementTypeOptions => [..._measurementTypeOptions];
 
-  List<String> get portionUnitOptions => _specificUnitOptions.map((m) => m.singular).toList();
-
-  List<String> get cookingUnitOptions => _specificUnitOptions.map((m) => m.singular).toList();
-
   List<String> get categoryOptions => _categoryOptions.map((m) => m.name).toList();
 
-  Future<void> setSpecificUnitOptions() async {
-    _specificUnitOptions = await ParentService.database.getSpecificUnits();
-    notifyListeners();
-  }
+  Map<String, DBIngredientUnitController> get units => {..._units};
 
-  Future<void> setCategoryOptions() async {
+  Future<void> _setCategoryOptions() async {
     _categoryOptions = await ParentService.database.getIngredientCategories();
     notifyListeners();
   }
@@ -77,30 +66,12 @@ class DBIngredientController extends ChangeNotifier {
     return 0;
   }
 
-  int get measurementType {
+  int get measurementTypeIndex {
     if (_volume) {
       return 0;
     } else {
       return 1;
     }
-  }
-
-  int get cookingUnitIndex {
-    for (int i = 0; i < _specificUnitOptions.length; i++) {
-      if (_categoryOptions[i].name == _cookingUnit) {
-        return i;
-      }
-    }
-    return 0;
-  }
-
-  int get portionUnitIndex {
-    for (int i = 0; i < _specificUnitOptions.length; i++) {
-      if (_categoryOptions[i].name == _portionUnit) {
-        return i;
-      }
-    }
-    return 0;
   }
 
   void onDelete(BuildContext context) {
@@ -116,16 +87,15 @@ class DBIngredientController extends ChangeNotifier {
 
   DBIngredientModel toModel() {
     String measurementType = (_volume) ? "volume" : "mass";
-    DBIngredientUnitModel unit = DBIngredientUnitModel("", "", "whole", measurementType, {});
-    return DBIngredientModel(_id, _name, _plural, _category, unit);
+    Map<String, DBIngredientUnitModel> modelUnits = Map<String, DBIngredientUnitModel>();
+    _units.forEach((String key, DBIngredientUnitController value) {
+      modelUnits[key] = value.toModel();
+    });
+    return DBIngredientModel(_id, _name, _plural, _category, measurementType, modelUnits);
   }
 
   void ingredientNameChanged(String newText) {
     _name = newText;
-  }
-
-  void ingredientTagsChanged(List<String> newTags) {
-    _tags = newTags;
   }
 
   void ingredientPluralChanged(String newText) {
@@ -137,15 +107,52 @@ class DBIngredientController extends ChangeNotifier {
   }
 
   void measurementTypeChanged(int x) {
-    print("Measurement type changed");
     _volume = (x != 0);
   }
+}
 
-  void cookingUnitChanged(int x) {
-    _cookingUnit = _specificUnitOptions[x].singular;
+class DBIngredientUnitController extends ChangeNotifier {
+  String _singular, _plural;
+  int _unitCategoryIndex;
+  double _conversionFactorTo;
+  static const List<String> unitCategoryOptions = ["", "whole", "specific", "SI"];
+
+  DBIngredientUnitController(this._singular, this._plural, String unitCategory, this._conversionFactorTo) {
+    _unitCategoryIndex = unitCategoryOptions.indexOf(unitCategory);
   }
 
-  void portionUnitChanged(int x) {
-    _portionUnit = _specificUnitOptions[x].singular;
+  DBIngredientUnitController.empty() {
+    _singular = "";
+    _plural = "";
+    _unitCategoryIndex = 0;
+    _conversionFactorTo = 0;
+  }
+
+  String get singular => _singular;
+
+  String get plural => _plural;
+
+  int get unitCategoryIndex => _unitCategoryIndex;
+
+  double get conversionFactorTo => _conversionFactorTo;
+
+  void singularChanged(String newText) {
+    _singular = newText;
+  }
+
+  void pluralChanged(String newText) {
+    _plural = newText;
+  }
+
+  void unitCategoryIndexChanged(int x) {
+    _unitCategoryIndex = x;
+  }
+
+  void conversionFactorToChanged(String newText) {
+    _conversionFactorTo = double.tryParse(newText) ?? 0;
+  }
+
+  DBIngredientUnitModel toModel() {
+    return DBIngredientUnitModel(_singular, _plural, unitCategoryOptions[_unitCategoryIndex], _conversionFactorTo);
   }
 }

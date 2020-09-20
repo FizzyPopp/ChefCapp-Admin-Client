@@ -73,5 +73,10 @@ class ParentService {
     // /validate
     // /ingredient/add
     // /instructions/parse
+
+    // saving a recipe: send list of steps to be "Stamped" -> get back list of steps as well as a half-empty recipe object
+    // fill in half-empty recipe object
+    // send full recipe object and list of steps to be validated and, if successfully validated, saved
+    // can send recipe for validation at any time, only checks syntax, not semantics
   }
 }
