@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:chef_capp_admin_client/index.dart';
 
@@ -11,6 +13,8 @@ class DatabaseService {
   FireState _fireState;
   final AuthService _authService = AuthService();
   final Cache cache;
+
+  static const String _baseUrl = 'http://ec2-3-17-181-130.us-east-2.compute.amazonaws.com';
 
   DatabaseService() : cache = Cache() {
     _fireState = FireState.Uninitialized;
@@ -128,6 +132,20 @@ class DatabaseService {
     }
 
     recipe.steps = steps;
+  }
+
+  Future<bool> saveIngredient(DBIngredientModel model) async {
+    String url = _baseUrl + '/ingredient/add';
+
+    var response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(model.toJson())
+    );
+
+    print(response.body);
   }
 }
 

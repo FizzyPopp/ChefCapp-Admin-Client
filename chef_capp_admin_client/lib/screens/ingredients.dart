@@ -270,10 +270,10 @@ class IngredientAdd extends StatelessWidget {
                         builder: (context, controller, _) {
                       return DropdownButtonFormField<int>(
                         key: UniqueKey(),
-                        value: 0,
+                        value: controller.category,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: 'Categories',
+                          labelText: 'Category',
                         ),
                         items: toDropMenuItems(controller.categoryOptions),
                         onChanged: (int x) {

@@ -128,7 +128,7 @@ class RecipeController extends ChangeNotifier {
     }
   }
 
-  bool deleteStep(RecipeStepController step) {
+  void deleteStep(RecipeStepController step) {
     _steps.removeAt(step.step - 1);
     setStepNumbers();
     notifyListeners();

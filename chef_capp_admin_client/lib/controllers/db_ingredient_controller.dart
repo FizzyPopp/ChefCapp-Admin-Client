@@ -21,6 +21,7 @@ class DBIngredientController extends ChangeNotifier {
     _portionUnit = "?";
     _tags = [];
     _categoryOptions = [];
+    _volume = (model.unit.measurementType == "volume");
     setCategoryOptions();
     setSpecificUnitOptions();
   }
@@ -29,6 +30,7 @@ class DBIngredientController extends ChangeNotifier {
     _id = IDModel.nil();
     _tags = [];
     _categoryOptions = [];
+    _volume = true;
     setCategoryOptions();
     setSpecificUnitOptions();
   }
@@ -38,6 +40,15 @@ class DBIngredientController extends ChangeNotifier {
   List<String> get tags => [..._tags];
 
   String get plural => _plural;
+
+  int get category {
+    List<String> tmp = _categoryOptions.map<String>((m) => m.name).toList();
+    if (tmp.contains(_category)) {
+      return tmp.indexOf(_category);
+    } else {
+      return 0;
+    }
+  }
 
   List<String> get measurementTypeOptions => [..._measurementTypeOptions];
 
@@ -96,8 +107,11 @@ class DBIngredientController extends ChangeNotifier {
     print("delete ingredient");
   }
 
-  void onSave(BuildContext context) {
+  void onSave(BuildContext context) async {
     print(toModel().toJson());
+    //ParentService.database.saveIngredient(toModel());
+
+    // close window?
   }
 
   DBIngredientModel toModel() {
@@ -123,6 +137,7 @@ class DBIngredientController extends ChangeNotifier {
   }
 
   void measurementTypeChanged(int x) {
+    print("Measurement type changed");
     _volume = (x != 0);
   }
 
