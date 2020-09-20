@@ -58,7 +58,15 @@ class RecipeModel implements EqualsInterface {
     };
   }
 
-  Map<String, dynamic> stepsToJson() {
-    return {};
+  List<Map<String, dynamic>> stepsToJson() {
+    List<Map<String, dynamic>> stepsJson = [];
+    for (RecipeStepModel m in _steps) {
+      stepsJson.add(m.toJson());
+    }
+    for (int i = 1; i < stepsJson.length; i++) {
+      stepsJson[i]["previous"] = stepsJson[i-1]["id"];
+      stepsJson[i-1]["next"] = stepsJson[i]["id"];
+    }
+    return stepsJson;
   }
 }

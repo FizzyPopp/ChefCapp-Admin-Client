@@ -29,4 +29,33 @@ class RecipeStepModel implements EqualsInterface {
     // TODO: instructions
     return RecipeStepModel(IDModel(data["id"]), "instructions", step, ingredients);
   }
+
+  Map<String, dynamic> toJson() {
+    List<String> ingredientKeys = [];
+    Map<String, dynamic> ingredientsJson = {};
+    for (StepIngredientModel m in _ingredients) {
+      ingredientKeys.add(m.id.toString());
+      ingredientsJson[m.id.toString()] = m.toJson();
+    }
+    return {
+      "id": id.toString(),
+      "name": {
+        "singular": ""
+      },
+      "previous": IDModel.nil().toString(),
+      "next": IDModel.nil().toString(),
+      "type": "step",
+      "time": {
+        "min": 0,
+        "max": 0
+      },
+      "ingredients": {
+        "keys": ingredientKeys,
+        ...ingredientsJson
+      },
+      "utensils": [],
+      "appliances": [],
+      "instructions": instructions
+    };
+  }
 }

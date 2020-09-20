@@ -73,6 +73,7 @@ class ParentService {
     // /validate
     // /ingredient/add
     // /instructions/parse
+    // /recipe/add
 
     // saving a recipe: send list of steps to be "Stamped" -> get back list of steps as well as a half-empty recipe object
     // fill in half-empty recipe object

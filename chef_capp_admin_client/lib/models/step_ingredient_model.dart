@@ -31,7 +31,7 @@ class StepIngredientModel implements EqualsInterface {
       "id": id.toString(),
       "name": {
         "singular": name,
-        "plural": name,
+        "plural": plural,
       },
       "unit": unit,
       "quantity": quantity

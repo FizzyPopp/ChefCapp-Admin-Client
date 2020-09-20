@@ -177,8 +177,6 @@ class RecipePage extends StatelessWidget {
                                     OutlineButton(
                                       child: Text('SAVE'),
                                       onPressed: () {
-                                        print(
-                                            "save button pressed from recipe edit page");
                                         controller.onSave(context);
                                       },
                                     ),
@@ -188,8 +186,6 @@ class RecipePage extends StatelessWidget {
                                     RaisedButton(
                                       child: Text('PUBLISH'),
                                       onPressed: () {
-                                        print(
-                                            "publish button pressed from recipe edit page");
                                         controller.onPublish(context);
                                       },
                                     ),

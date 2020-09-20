@@ -54,9 +54,8 @@ class RecipeController extends ChangeNotifier {
     Navigator.pop(context);
   }
 
-  void onSave(BuildContext context) {
-    // send to validator
-    print(toModel().toJson());
+  void onSave(BuildContext context) async {
+    ParentService.database.saveRecipe(toModel());
   }
 
   RecipeModel toModel() {

@@ -79,8 +79,7 @@ class DBIngredientController extends ChangeNotifier {
   }
 
   void onSave(BuildContext context) async {
-    print(toModel().toJson());
-    //ParentService.database.saveIngredient(toModel());
+    ParentService.database.saveIngredient(toModel());
 
     // close window?
   }
