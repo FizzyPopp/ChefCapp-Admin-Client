@@ -1,7 +1,7 @@
 import 'package:chef_capp_admin_client/index.dart';
 
 class RecipeStepIngredientController extends ChangeNotifier {
-  final IngredientOptionsController _ingredientOptionsController;
+  IngredientOptionsController _ingredientOptionsController;
   final RecipeStepController _parent;
   final int fakeID;
   IDModel _id;
@@ -13,21 +13,23 @@ class RecipeStepIngredientController extends ChangeNotifier {
   static const List<String> SI = ["g", "kg", "lb", "ml", "L", "cup"];
   List<String> _specific = [];
 
-  RecipeStepIngredientController(StepIngredientModel ingredient, this.fakeID, this._parent) : _ingredientOptionsController = IngredientOptionsController(ingredient.name){
+  RecipeStepIngredientController(StepIngredientModel ingredient, this.fakeID, this._parent) {
     _id = ingredient.id;
     _name = ingredient.name;
     _unitCategory = ingredient.unitCategory;
     _quantity = ingredient.quantity.toString();
     _unit = ingredient.unit;
+    _ingredientOptionsController = IngredientOptionsController(_name, _setId);
     setSpecific();
   }
 
-  RecipeStepIngredientController.empty(this.fakeID, this._parent) : _ingredientOptionsController = IngredientOptionsController("") {
+  RecipeStepIngredientController.empty(this.fakeID, this._parent) {
     _id = IDModel.nil();
     _name = "";
     _unitCategory = "whole";
     _quantity = "";
     _unit = "";
+    _ingredientOptionsController = IngredientOptionsController(_name, _setId);
     setSpecific();
   }
 
@@ -46,6 +48,8 @@ class RecipeStepIngredientController extends ChangeNotifier {
   List<DBIngredientModel> get ingredientOptions => [..._ingredientOptionsController.options];
   IngredientOptionsController get optionsController => _ingredientOptionsController;
   TextEditingController get fieldController => _ingredientOptionsController.fieldController;
+
+  void _setId(IDModel id) => _id = id;
 
   void setSpecific() async {
     _specific = (await ParentService.database.getSpecificUnits()).map<String>((m) => m.toString()).toList();
@@ -91,8 +95,9 @@ class IngredientOptionsController extends ChangeNotifier {
   List<DBIngredientModel> _allIngredients = [];
   List<DBIngredientModel> _ingredientOptions = [];
   final TextEditingController fieldController;
+  final Function _setId;
 
-  IngredientOptionsController(String initialValue) : fieldController = TextEditingController(text: initialValue) {
+  IngredientOptionsController(String name, this._setId) : fieldController = TextEditingController(text: name) {
     setAllIngredients();
   }
 
@@ -116,5 +121,6 @@ class IngredientOptionsController extends ChangeNotifier {
 
   void ingredientOptionTapped(DBIngredientModel model) {
     fieldController.text = model.singular;
+    _setId(model.id);
   }
 }
