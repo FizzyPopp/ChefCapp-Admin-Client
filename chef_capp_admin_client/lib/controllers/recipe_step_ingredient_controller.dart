@@ -1,64 +1,54 @@
 import 'package:chef_capp_admin_client/index.dart';
 
+// most controller should be changed to use an underlying _modelOut
 class RecipeStepIngredientController extends ChangeNotifier {
   IngredientOptionsController _ingredientOptionsController;
   final RecipeStepController _parent;
   final int fakeID;
-  IDModel _id;
-  // verbiage and unit should really be lists
-  String _name, _plural, _unitCategory, _quantity, _unit;
-  static const List<String> unitCategoryOptions = DBIngredientUnitController.unitCategoryOptions;
-  List<String> _unitOptions = [];
-  // this depends on the measurement type of the ingredient, but it might work for MVP
-  static const List<String> SI = ["g", "kg", "lb", "ml", "L", "cup"];
-  List<String> _specific = [];
+
+  List<StepIngredientUnitModel> _unitOptions = [];
+  List<StepIngredientUnitModel> _specificUnitOptions = [];
+
+  StepIngredientModel _modelOut;
 
   RecipeStepIngredientController(StepIngredientModel ingredient, this.fakeID, this._parent) {
-    _id = ingredient.id;
-    _name = ingredient.name;
-    _plural = ingredient.plural;
-    _unitCategory = ingredient.unitCategory;
-    _quantity = ingredient.quantity.toString();
-    _unit = ingredient.unit;
-    _ingredientOptionsController = IngredientOptionsController(_name, _update);
-    setSpecific();
+    _ingredientOptionsController = IngredientOptionsController(ingredient.name, _update);
+    _modelOut = ingredient.copy();
+    setSpecificUnitOptions();
+    setUnitOptions();
   }
 
   RecipeStepIngredientController.empty(this.fakeID, this._parent) {
-    _id = IDModel.nil();
-    _name = "";
-    _plural = "";
-    _unitCategory = "whole";
-    _quantity = "";
-    _unit = "";
-    _ingredientOptionsController = IngredientOptionsController(_name, _update);
-    setSpecific();
+    _ingredientOptionsController = IngredientOptionsController("", _update);
+    _modelOut = null;
+    setSpecificUnitOptions();
+    setUnitOptions();
   }
 
   StepIngredientModel toModel() {
-    if ((double.tryParse(_quantity) ?? -1) <= 0) {
+    if (_modelOut == null) {
       return null;
     }
-    return StepIngredientModel(_id, _name, _plural, _unitCategory, double.parse(quantity), _unit);
+    return _modelOut;
   }
 
-  String get name => _name;
-  String get unitCategory => _unitCategory;
-  String get quantity => _quantity;
-  String get unit => _unit;
-  List<String> get unitOptions => [..._unitOptions];
-  List<DBIngredientModel> get ingredientOptions => [..._ingredientOptionsController.options];
+  String get name => _modelOut.name;
+  String get unitCategory => _modelOut.unit.unitCategory;
+  String get quantity => _modelOut.quantity.toString();
+  int get unit => _unitOptions.indexOf(_modelOut.unit);
+  List<String> get unitOptions => _unitOptions.map<String>((m) => m.singular).toList();
   IngredientOptionsController get optionsController => _ingredientOptionsController;
   TextEditingController get fieldController => _ingredientOptionsController.fieldController;
+  List<DBIngredientModel> get ingredientOptions => [..._ingredientOptionsController.options];
 
   void _update(DBIngredientModel model) {
-    _id = model.id;
-    _name = model.singular;
-    _plural = model.plural;
+    _modelOut.id = model.id;
+    _modelOut.name = model.singular;
+    _modelOut.plural = model.plural;
   }
 
-  void setSpecific() async {
-    _specific = (await ParentService.database.getSpecificUnits()).map<String>((m) => m.toString()).toList();
+  void setSpecificUnitOptions() async {
+    _specificUnitOptions = (await ParentService.database.getSpecificUnits()).map<StepIngredientUnitModel>((m) => m.toStepIngredientUnitModel()).toList();
     setUnitOptions();
     notifyListeners();
   }
@@ -68,16 +58,16 @@ class RecipeStepIngredientController extends ChangeNotifier {
   }
 
   void unitCategoryChanged(String x) {
-    _unitCategory = x;
+    _modelOut.unit.unitCategory = x;
     setUnitOptions();
   }
 
   void quantityChanged(String newText) {
-    _quantity = newText;
+    _modelOut.quantity = double.tryParse(newText) ?? 0;
   }
 
-  void unitChanged(String x) {
-    _unit = x;
+  void unitChanged(int x) {
+    _modelOut.unit = _unitOptions[x];
   }
 
   void onDelete() {
@@ -85,12 +75,12 @@ class RecipeStepIngredientController extends ChangeNotifier {
   }
 
   void setUnitOptions() {
-    if (_unitCategory == "whole") {
-      _unitOptions = [];
-    } else if (_unitCategory == "specific") {
-      _unitOptions = [..._specific];
-    } else if (_unitCategory == "SI") {
-      _unitOptions = SI;
+    if (_modelOut.unit.unitCategory == "whole") {
+      _unitOptions = StepIngredientUnitModel.wholeOptions;
+    } else if (_modelOut.unit.unitCategory == "specific") {
+      _unitOptions = [..._specificUnitOptions];
+    } else if (_modelOut.unit.unitCategory == "SI") {
+      _unitOptions = StepIngredientUnitModel.siOptions;
     } else {
       _unitOptions = [];
     }

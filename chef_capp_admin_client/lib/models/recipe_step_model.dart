@@ -27,7 +27,21 @@ class RecipeStepModel implements EqualsInterface {
       ingredients.add(StepIngredientModel.fromDB(data["ingredients"][id]));
     }
     // TODO: instructions
-    return RecipeStepModel(IDModel(data["id"]), "instructions", step, ingredients);
+    return RecipeStepModel(IDModel(data["id"]), _parseInstructions(data["instructions"]), step, ingredients);
+  }
+
+  static String _parseInstructions(Map<String, dynamic> data) {
+    String out = "";
+    Map<String, int> lookup = Map<String, int>();
+    for (String s in data["abstract"]) {
+      if (lookup.containsKey(s)) {
+        out += data[s][lookup[s]++];
+      } else {
+        out += data[s][0];
+        lookup[s] = 1;
+      }
+    }
+    return out;
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +59,8 @@ class RecipeStepModel implements EqualsInterface {
       "previous": IDModel.nil().toString(),
       "next": IDModel.nil().toString(),
       "type": "step",
+      "tags": [],
+      "calories": 0,
       "time": {
         "min": 0,
         "max": 0

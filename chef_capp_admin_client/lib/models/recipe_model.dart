@@ -30,8 +30,8 @@ class RecipeModel implements EqualsInterface {
   static RecipeModel fromDB(data) {
     // TODO: yield, steps, status
     List<RecipeStepModel> steps = [];
-    for (int i = 0; i < data["components"].length; i++) {
-      steps.add(RecipeStepModel(IDModel(data["components"][i]), "", i+1, []));
+    for (int i = 0; i < data["steps"].length; i++) {
+      steps.add(RecipeStepModel(IDModel(data["steps"][i]), "", i+1, []));
     }
     return RecipeModel(IDModel(data["id"]), data["name"]["singular"], 0, data["time"]["prepare"], data["time"]["cook"], steps, "published");
   }

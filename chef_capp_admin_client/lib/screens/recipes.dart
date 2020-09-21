@@ -472,7 +472,7 @@ class RecipeStep extends StatelessWidget {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                       ),
-                      items: RecipeStepIngredientController.unitCategoryOptions
+                      items: DBIngredientUnitModel.unitCategoryOptions
                           .map<DropdownMenuItem<String>>((s) =>
                               DropdownMenuItem<String>(
                                   value: s, child: Text(s)))
@@ -510,26 +510,27 @@ class RecipeStep extends StatelessWidget {
               Expanded(
                 child: Consumer<RecipeStepIngredientController>(
                     builder: (context, controller, _) {
-                  return DropdownButtonFormField<String>(
+                  return DropdownButtonFormField<int>(
                     key: UniqueKey(),
+                    //value: controller.unit,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                     ),
-                    items: <DropdownMenuItem<String>>[
-                      DropdownMenuItem<String>(
-                        value: "Unit",
+                    items: <DropdownMenuItem<int>>[
+                      DropdownMenuItem<int>(
+                        value: 0,
                         child: Text("Unit"),
                       ),
-                      DropdownMenuItem<String>(
-                        value: "Item 2",
+                      DropdownMenuItem<int>(
+                        value: 1,
                         child: Text('Item 2'),
                       ),
-                      DropdownMenuItem<String>(
-                        value: "Item 3",
+                      DropdownMenuItem<int>(
+                        value: 2,
                         child: Text('Item 3'),
                       ),
                     ],
-                    onChanged: (String x) {
+                    onChanged: (int x) {
                       controller.unitChanged(x);
                     },
                   );

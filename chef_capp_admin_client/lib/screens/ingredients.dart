@@ -288,94 +288,16 @@ class IngredientAdd extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: xMargins / 2),
-                    child: Consumer<DBIngredientController>(
-                        builder: (context, controller, _) {
-                          return DropdownButtonFormField<int>(
-                            key: UniqueKey(),
-                            value: 0,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Measurement type',
-                            ),
-                            items:
-                            toDropMenuItems(controller.measurementTypeOptions),
-                            onChanged: (int x) {
-                              controller.measurementTypeChanged(x);
-                            },
-                          );
-                        }),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: xMargins / 2),
                     child: Text(
                       'Cooking unit',
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
-                  Row(children: [
-                    Expanded(
-                      child: TextFormField(
-                        key: UniqueKey(),
-                        initialValue: "",
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'singular',
-                        ),
-                        onChanged: (newText) {
-                          //controller.quantityChanged(newText);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: xMargins,
-                    ),
-                    Expanded(
-                        child: TextFormField(
-                          key: UniqueKey(),
-                          initialValue: "",
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'plural',
-                          ),
-                          onChanged: (newText) {
-                            //controller.quantityChanged(newText);
-                          },
-                        )
-                    ),
-                    SizedBox(
-                      width: xMargins,
-                    ),
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                            key: UniqueKey(),
-                            value: "",
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                            items: [],
-                            onChanged: (String x) {
-                              print(x);
-                            },
-                          )
-                      ),
-                    SizedBox(
-                      width: xMargins,
-                    ),
-                    Expanded(
-                        child: TextFormField(
-                          key: UniqueKey(),
-                          initialValue: "",
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Conversion Factor',
-                          ),
-                          onChanged: (newText) {
-                            print(newText);
-                            //controller.quantityChanged(newText);
-                          },
-                        )
-                    ),
-                  ]),
+                  Consumer<DBIngredientController>(
+                      builder: (context, controller, _) {
+                        return IngredientUnitRow(controller.units["cooking"]);
+                      }
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: xMargins / 2),
                     child: Text(
@@ -383,70 +305,11 @@ class IngredientAdd extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
-                  Row(children: [
-                    Expanded(
-                      child: TextFormField(
-                        key: UniqueKey(),
-                        initialValue: "",
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'singular',
-                        ),
-                        onChanged: (newText) {
-                          //controller.quantityChanged(newText);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: xMargins,
-                    ),
-                    Expanded(
-                        child: TextFormField(
-                          key: UniqueKey(),
-                          initialValue: "",
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'plural',
-                          ),
-                          onChanged: (newText) {
-                            //controller.quantityChanged(newText);
-                          },
-                        )
-                    ),
-                    SizedBox(
-                      width: xMargins,
-                    ),
-                    Expanded(
-                        child: DropdownButtonFormField<String>(
-                          key: UniqueKey(),
-                          value: "",
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          items: [],
-                          onChanged: (String x) {
-                            print(x);
-                          },
-                        )
-                    ),
-                    SizedBox(
-                      width: xMargins,
-                    ),
-                    Expanded(
-                        child: TextFormField(
-                          key: UniqueKey(),
-                          initialValue: "",
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Conversion Factor',
-                          ),
-                          onChanged: (newText) {
-                            print(newText);
-                            //controller.quantityChanged(newText);
-                          },
-                        )
-                    ),
-                  ]),
+                  Consumer<DBIngredientController>(
+                    builder: (context, controller, _) {
+                      return IngredientUnitRow(controller.units["portion"]);
+                    }
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -514,5 +377,125 @@ class AppProfile {
   @override
   String toString() {
     return name;
+  }
+}
+
+class IngredientUnitRow extends StatelessWidget {
+  final DBIngredientUnitController controller;
+
+  IngredientUnitRow(this.controller);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: Row(children: [
+          Expanded(
+            child: Consumer<DBIngredientUnitController>(
+              builder: (context, controller, _) {
+                return TextFormField(
+                  key: UniqueKey(),
+                  initialValue: controller.singular,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'singular',
+                  ),
+                  onChanged: (newText) {
+                    controller.singularChanged(newText);
+                  },
+                );
+              }
+            ),
+          ),
+          SizedBox(
+            width: xMargins,
+          ),
+          Expanded(
+              child: Consumer<DBIngredientUnitController>(
+                builder: (context, controller, _) {
+                  return TextFormField(
+                    key: UniqueKey(),
+                    initialValue: controller.plural,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'plural',
+                    ),
+                    onChanged: (newText) {
+                      controller.pluralChanged(newText);
+                    },
+                  );
+                }
+              )
+          ),
+          SizedBox(
+            width: xMargins,
+          ),
+          Expanded(
+              child: Consumer<DBIngredientUnitController>(
+                  builder: (context, controller, _) {
+                    return DropdownButtonFormField<String>(
+                      key: UniqueKey(),
+                      value: controller.measurementType,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      items: DBIngredientUnitModel.measurementTypeOptions.map<DropdownMenuItem<String>>((s) =>
+                          DropdownMenuItem<String>(
+                            value: s,
+                            child: Text(s),
+                          )).toList(),
+                      onChanged: (String x) {
+                        controller.measurementTypeChanged(x);
+                      },
+                    );
+                  }
+              )
+          ),
+          SizedBox(
+            width: xMargins,
+          ),
+          Expanded(
+              child: Consumer<DBIngredientUnitController>(
+                  builder: (context, controller, _) {
+                    return DropdownButtonFormField<String>(
+                      key: UniqueKey(),
+                      value: controller.unitCategory,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      items: DBIngredientUnitModel.unitCategoryOptions.map<DropdownMenuItem<String>>((s) =>
+                          DropdownMenuItem<String>(
+                            value: s,
+                            child: Text(s),
+                          )).toList(),
+                      onChanged: (String x) {
+                        controller.unitCategoryChanged(x);
+                      },
+                    );
+                  }
+              )
+          ),
+          SizedBox(
+            width: xMargins,
+          ),
+          Expanded(
+              child: Consumer<DBIngredientUnitController>(
+                builder: (context, controller, _) {
+                  return TextFormField(
+                    key: UniqueKey(),
+                    initialValue: controller.conversionFactorTo.toString(),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Conversion Factor',
+                    ),
+                    onChanged: (String newText) {
+                      controller.conversionFactorToChanged(newText);
+                    },
+                  );
+                }
+              )
+          ),
+        ])
+    );
   }
 }

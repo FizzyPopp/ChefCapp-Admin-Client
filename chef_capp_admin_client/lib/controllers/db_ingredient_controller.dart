@@ -4,22 +4,20 @@ class DBIngredientController extends ChangeNotifier {
   final DBIngredientListController parent;
   IDModel _id;
   String _name, _plural, _category;
-  bool _volume; // what measurementType
   List<IngredientCategoryModel> _categoryOptions= [];
   Map<String, DBIngredientUnitController> _units = {
     "cooking": DBIngredientUnitController.empty(),
     "portion": DBIngredientUnitController.empty()
   };
-  final List<String> _measurementTypeOptions = ["mass", "volume"];
+  static const List<String> _measurementTypeOptions = ["mass", "volume"];
 
   DBIngredientController(DBIngredientModel model, this.parent) {
     _id = model.id;
     _name = model.singular;
     _plural = model.plural;
     _category = model.category;
-    _volume = (model.measurementType == "volume");
     model.units.forEach((String key, DBIngredientUnitModel value) {
-      _units[key] = DBIngredientUnitController(value.singular, value.plural, value.unitCategory, value.conversionFactorTo);
+      _units[key] = DBIngredientUnitController(value.singular, value.plural, value.measurementType, value.unitCategory, value.conversionFactorTo);
     });
     _setCategoryOptions();
   }
@@ -29,7 +27,6 @@ class DBIngredientController extends ChangeNotifier {
     _name = "";
     _plural = "";
     _category = "";
-    _volume = true;
     _setCategoryOptions();
   }
 
@@ -66,14 +63,6 @@ class DBIngredientController extends ChangeNotifier {
     return 0;
   }
 
-  int get measurementTypeIndex {
-    if (_volume) {
-      return 0;
-    } else {
-      return 1;
-    }
-  }
-
   void onDelete(BuildContext context) {
     print("delete ingredient");
   }
@@ -85,12 +74,12 @@ class DBIngredientController extends ChangeNotifier {
   }
 
   DBIngredientModel toModel() {
-    String measurementType = (_volume) ? "volume" : "mass";
     Map<String, DBIngredientUnitModel> modelUnits = Map<String, DBIngredientUnitModel>();
     _units.forEach((String key, DBIngredientUnitController value) {
       modelUnits[key] = value.toModel();
     });
-    return DBIngredientModel(_id, _name, _plural, _category, measurementType, modelUnits);
+    return DBIngredientModel(_id, _name, _plural, _category, modelUnits);
+    //return DBIngredientModel(_id, _name, _plural, _category, measurementType, modelUnits);
   }
 
   void ingredientNameChanged(String newText) {
@@ -104,26 +93,19 @@ class DBIngredientController extends ChangeNotifier {
   void categoryChanged(int x) {
     _category = _categoryOptions[x].name;
   }
-
-  void measurementTypeChanged(int x) {
-    _volume = (x != 0);
-  }
 }
 
 class DBIngredientUnitController extends ChangeNotifier {
-  String _singular, _plural;
-  int _unitCategoryIndex;
+  String _singular, _plural, _measurementType, _unitCategory;
   double _conversionFactorTo;
-  static const List<String> unitCategoryOptions = ["", "whole", "specific", "SI"];
 
-  DBIngredientUnitController(this._singular, this._plural, String unitCategory, this._conversionFactorTo) {
-    _unitCategoryIndex = unitCategoryOptions.indexOf(unitCategory);
-  }
+  DBIngredientUnitController(this._singular, this._plural, this._measurementType, this._unitCategory, this._conversionFactorTo);
 
   DBIngredientUnitController.empty() {
     _singular = "";
     _plural = "";
-    _unitCategoryIndex = 0;
+    _measurementType = "";
+    _unitCategory = "";
     _conversionFactorTo = 0;
   }
 
@@ -131,7 +113,9 @@ class DBIngredientUnitController extends ChangeNotifier {
 
   String get plural => _plural;
 
-  int get unitCategoryIndex => _unitCategoryIndex;
+  String get measurementType => _measurementType;
+
+  String get unitCategory => _unitCategory;
 
   double get conversionFactorTo => _conversionFactorTo;
 
@@ -143,8 +127,12 @@ class DBIngredientUnitController extends ChangeNotifier {
     _plural = newText;
   }
 
-  void unitCategoryIndexChanged(int x) {
-    _unitCategoryIndex = x;
+  void measurementTypeChanged(String x) {
+    _measurementType = x;
+  }
+
+  void unitCategoryChanged(String x) {
+    _unitCategory = x;
   }
 
   void conversionFactorToChanged(String newText) {
@@ -152,6 +140,6 @@ class DBIngredientUnitController extends ChangeNotifier {
   }
 
   DBIngredientUnitModel toModel() {
-    return DBIngredientUnitModel(_singular, _plural, unitCategoryOptions[_unitCategoryIndex], _conversionFactorTo);
+    return DBIngredientUnitModel(_singular, _plural, _measurementType, _unitCategory, _conversionFactorTo);
   }
 }

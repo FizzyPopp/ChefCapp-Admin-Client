@@ -5,7 +5,7 @@ class UnitController extends ChangeNotifier {
   String _singular, _plural;
   final int fakeID;
 
-  UnitController(this.fakeID, SpecificUnitModel model, this.parent) {
+  UnitController(this.fakeID, DBIngredientUnitModel model, this.parent) {
     _singular = model.singular;
     _plural = model.plural;
     //ParentService.database.getIngredients(); // might as well, we're going to need them later
@@ -28,8 +28,8 @@ class UnitController extends ChangeNotifier {
     _plural = newText;
   }
 
-  SpecificUnitModel toModel() {
-    return SpecificUnitModel(_singular, _plural, []);
+  DBIngredientUnitModel toModel() {
+    return DBIngredientUnitModel(_singular, _plural, "mass", "whole", 1);
   }
 
   void onDelete() {

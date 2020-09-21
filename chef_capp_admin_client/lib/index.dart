@@ -30,7 +30,6 @@ export 'package:chef_capp_admin_client/models/recipe_step_model.dart';
 export 'package:chef_capp_admin_client/models/recipe_model.dart';
 export 'package:chef_capp_admin_client/models/interfaces/equals_interface.dart';
 export 'package:chef_capp_admin_client/models/dummy_models.dart';
-export 'package:chef_capp_admin_client/models/specific_unit_model.dart';
 export 'package:chef_capp_admin_client/models/ingredient_category_model.dart';
 
 export 'package:chef_capp_admin_client/controllers/db_ingredient_controller.dart';
