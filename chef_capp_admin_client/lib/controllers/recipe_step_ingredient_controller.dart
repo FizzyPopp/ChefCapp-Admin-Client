@@ -35,7 +35,10 @@ class RecipeStepIngredientController extends ChangeNotifier {
   String get name => _modelOut.name;
   String get unitCategory => _modelOut.unit.unitCategory;
   String get quantity => _modelOut.quantity.toString();
-  int get unit => _unitOptions.indexOf(_modelOut.unit);
+  int get unit {
+    int i = unitOptions.indexOf(_modelOut.unit.singular);
+    return (i == -1) ? 0 : i;
+  }
   List<String> get unitOptions => _unitOptions.map<String>((m) => m.singular).toList();
   IngredientOptionsController get optionsController => _ingredientOptionsController;
   TextEditingController get fieldController => _ingredientOptionsController.fieldController;
@@ -84,6 +87,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
     } else {
       _unitOptions = [];
     }
+    notifyListeners();
   }
 }
 

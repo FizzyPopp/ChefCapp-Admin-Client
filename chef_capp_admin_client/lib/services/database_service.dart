@@ -91,6 +91,8 @@ class DatabaseService {
       out.add(DBIngredientUnitModel.fromDB(k, snapshot.data()[k]));
     }
 
+    out.insert(0, DBIngredientUnitModel.wholeOptions[0]); // add empty first element
+
     cache.specificUnits.data = out;
     return cache.specificUnits.data;
   }
@@ -150,12 +152,16 @@ class DatabaseService {
     Map<String, dynamic> r = unique.firstWhere((j) => j["previous"] == IDModel.nilUUID());
     rawDataInOrder.add(r);
     while (r["next"] != IDModel.nilUUID() && r != null) {
-      r = unique.firstWhere((j) => j["previous"] == r["next"], orElse: () => null);
+      r = unique.firstWhere((j) => j["previous"] == r["id"], orElse: () => null);
       rawDataInOrder.add(r);
     }
 
     if (r == null) {
       throw("something went wrong");
+    }
+
+    if (rawDataInOrder.length != unique.length) {
+      print("something else went wrong");
     }
 
     List<RecipeStepModel> steps = [];
@@ -193,14 +199,15 @@ class DatabaseService {
 
   Future<bool> saveRecipe(RecipeModel model) async {
     String url = _baseUrl + '/recipe/build';
-    //String url = _baseUrl + '/validate';
+    //String url = _baseUrl + '/instruction/parse';
 
     // saving a recipe: send list of steps to be "Stamped" -> get back list of steps as well as a half-empty recipe object
     // fill in half-empty recipe object
     // send full recipe object and list of steps to be validated and, if successfully validated, saved
 
-    //print(model.stepsToJson()[4]);
-    //print(model.stepsToJson());
+    print("ORIGINAL");
+    print(jsonEncode(model.stepsToJson()));
+    print("");
 
     var response = await http.post(
         url,
@@ -210,7 +217,9 @@ class DatabaseService {
         body: jsonEncode(model.stepsToJson())
     );
 
-    //print(response.body);
+    print("RESPONSE");
+    print(response.body);
+    print("");
 
     if (response.body == "Object with same hash found.") {
       return true;
@@ -220,6 +229,7 @@ class DatabaseService {
           return false;
         }
       } catch(e) {
+        print(response.body);
         print(e);
         return false;
       }
@@ -242,7 +252,16 @@ class DatabaseService {
       "steps": jsonResponse["stampedSteps"],
     };
 
-    // ARE STAMPEDSTEPS.LENGTH == STEPSCANDIDATE.LENGTH == MODEL.STEPSTOJSON().LENGTH ?
+    // /instructions/validate
+
+    print("STAMPED");
+    print(jsonEncode(jsonResponse["stampedSteps"]));
+    print("");
+    print("RECIPE");
+    print(jsonEncode(jsonResponse["recipeCandidate"]));
+    print("");
+
+    // CHECK IF STAMPEDSTEPS.LENGTH == STEPSCANDIDATE.LENGTH == MODEL.STEPSTOJSON().LENGTH ?
 
     url = _baseUrl + "/recipe/add";
 

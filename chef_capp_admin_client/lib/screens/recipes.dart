@@ -512,24 +512,16 @@ class RecipeStep extends StatelessWidget {
                     builder: (context, controller, _) {
                   return DropdownButtonFormField<int>(
                     key: UniqueKey(),
-                    //value: controller.unit,
+                    value: controller.unit,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                     ),
-                    items: <DropdownMenuItem<int>>[
-                      DropdownMenuItem<int>(
-                        value: 0,
-                        child: Text("Unit"),
-                      ),
-                      DropdownMenuItem<int>(
-                        value: 1,
-                        child: Text('Item 2'),
-                      ),
-                      DropdownMenuItem<int>(
-                        value: 2,
-                        child: Text('Item 3'),
-                      ),
-                    ],
+                    items: controller.unitOptions.asMap().entries.map<DropdownMenuItem<int>>((entry) {
+                      return DropdownMenuItem<int>(
+                        value: entry.key,
+                        child: Text(entry.value)
+                      );
+                    }).toList(),
                     onChanged: (int x) {
                       controller.unitChanged(x);
                     },

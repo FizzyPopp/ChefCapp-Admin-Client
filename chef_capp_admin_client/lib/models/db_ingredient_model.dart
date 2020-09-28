@@ -83,14 +83,20 @@ class DBIngredientUnitModel {
   static const List<String> measurementTypeOptions = ["", "mass", "volume"];
   static const List<String> unitCategoryOptions = ["", "whole", "specific", "SI"];
 
-  static const List<DBIngredientUnitModel> wholeOptions = [];
+  static final List<DBIngredientUnitModel> _wholeOptions = [
+    DBIngredientUnitModel("", "", "mass", "whole", 0)
+  ];
+  static List<DBIngredientUnitModel> get wholeOptions => [..._wholeOptions];
   static final List<DBIngredientUnitModel> _siOptions = [
+    DBIngredientUnitModel("", "", "mass", "whole", 0),
     DBIngredientUnitModel("kg", "kg", "mass", "SI", 1),
-    DBIngredientUnitModel("lb", "lbs", "mass", "SI", 2.20462),
-    DBIngredientUnitModel("g", "g", "mass", "SI", 1000),
-    DBIngredientUnitModel("mL", "mL", "volume", "SI", 1000),
+    DBIngredientUnitModel("lb", "lbs", "mass", "SI", 0.453592),
+    DBIngredientUnitModel("g", "g", "mass", "SI", 0.001),
+    DBIngredientUnitModel("mL", "mL", "volume", "SI", 0.001),
     DBIngredientUnitModel("L", "L", "volume", "SI", 1),
-    DBIngredientUnitModel("cup", "cups", "volume", "SI", 4.22675),
+    DBIngredientUnitModel("cup", "cups", "volume", "SI", 0.236588),
+    DBIngredientUnitModel("tsp", "tsp", "volume", "SI", 0.00492892),
+    DBIngredientUnitModel("tbsp", "tbsp", "volume", "SI", 0.0147868),
   ];
   static List<DBIngredientUnitModel> get siOptions => [..._siOptions];
 

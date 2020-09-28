@@ -32,10 +32,10 @@ class StepIngredientModel implements EqualsInterface {
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id.toString(),
+      "id": "${id.toString()}",
       "name": {
-        "singular": name,
-        "plural": plural,
+        "singular": "$name",
+        "plural": "$plural",
       },
       "unit": unit.toJson(),
       "quantity": quantity
@@ -49,7 +49,10 @@ class StepIngredientUnitModel {
   String measurementType; // mass, volume
   String unitCategory; // specific, whole, SI
 
-  static const List<StepIngredientUnitModel> wholeOptions = [];
+  static final List<StepIngredientUnitModel> _wholeOptions =
+    DBIngredientUnitModel.wholeOptions.map<StepIngredientUnitModel>(
+          (m) => m.toStepIngredientUnitModel()).toList();
+  static List<StepIngredientUnitModel> get wholeOptions => [..._wholeOptions];
   static final List<StepIngredientUnitModel> _siOptions =
     DBIngredientUnitModel.siOptions.map<StepIngredientUnitModel>(
             (m) => m.toStepIngredientUnitModel()).toList();
@@ -72,10 +75,10 @@ class StepIngredientUnitModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "singular": singular,
-      "plural": plural,
-      "measurementType": measurementType,
-      "unitCategory": unitCategory
+      "singular": "$singular",
+      "plural": "$plural",
+      "measurementType": "$measurementType",
+      "unitCategory": "$unitCategory"
     };
   }
 }

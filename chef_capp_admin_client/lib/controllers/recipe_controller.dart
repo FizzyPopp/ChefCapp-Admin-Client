@@ -115,7 +115,7 @@ class RecipeController extends ChangeNotifier {
       }
   }
 
-  bool moveStepDown(RecipeStepController step) {
+  void moveStepDown(RecipeStepController step) {
     if (step.step < _steps.length) {
       _steps.insert(step.step, _steps.removeAt(step.step - 1));
       setStepNumbers();

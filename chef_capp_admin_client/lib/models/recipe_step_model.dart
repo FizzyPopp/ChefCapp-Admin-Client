@@ -4,6 +4,8 @@ class RecipeStepModel implements EqualsInterface {
   final IDModel id;
   String instructions;
   int step;
+  double prepTime;
+  double cookTime;
   List<StepIngredientModel> _ingredients;
 
   RecipeStepModel(IDModel id, String instructions, int step, List<StepIngredientModel> ingredients) :
@@ -52,7 +54,7 @@ class RecipeStepModel implements EqualsInterface {
       ingredientsJson[m.id.toString()] = m.toJson();
     }
     return {
-      "id": id.toString(),
+      "id": "${id.toString()}",
       "name": {
         "singular": ""
       },
@@ -71,7 +73,7 @@ class RecipeStepModel implements EqualsInterface {
       },
       "utensils": [],
       "appliances": [],
-      "instructions": instructions
+      "instructions": "$instructions"
     };
   }
 }
