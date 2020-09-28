@@ -246,6 +246,8 @@ class DatabaseService {
 
     jsonResponse["recipeCandidate"]["id"] = model.id.toString();
     jsonResponse["recipeCandidate"]["name"] = {"singular": model.title};
+    jsonResponse["recipeCandidate"]["time"]["prepare"] = model.prepTime;
+    jsonResponse["recipeCandidate"]["time"]["cook"] = model.cookTime;
 
     Map<String, dynamic> toAdd = {
       "recipe": jsonResponse["recipeCandidate"],
@@ -273,7 +275,9 @@ class DatabaseService {
         body: jsonEncode(toAdd),
     );
 
+    print("ULTIMATE RESPONSE");
     print(response.body);
+    print("");
 
     if (response.body == "Object with same hash found.") {
       return true;
