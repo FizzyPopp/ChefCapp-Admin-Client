@@ -641,7 +641,7 @@ class _AutoFieldState extends State<AutoField> {
         ),
       ),
       onTap: () {
-        print('Add a new ingredient');
+        controller.onAddNew(context);
       },
     ));
 

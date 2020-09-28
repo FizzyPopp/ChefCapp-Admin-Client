@@ -20,7 +20,7 @@ class RecipeStepIngredientController extends ChangeNotifier {
 
   RecipeStepIngredientController.empty(this.fakeID, this._parent) {
     _ingredientOptionsController = IngredientOptionsController("", _update);
-    _modelOut = null;
+    _modelOut = StepIngredientModel.empty();
     setSpecificUnitOptions();
     setUnitOptions();
   }
@@ -122,5 +122,12 @@ class IngredientOptionsController extends ChangeNotifier {
   void ingredientOptionTapped(DBIngredientModel model) {
     fieldController.text = model.singular;
     _updateParent(model);
+  }
+
+  void onAddNew(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => IngredientAdd(DBIngredientController.empty(null)),
+    );
   }
 }

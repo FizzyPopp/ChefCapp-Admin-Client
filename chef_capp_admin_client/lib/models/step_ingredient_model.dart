@@ -15,9 +15,18 @@ class StepIngredientModel implements EqualsInterface {
         this.quantity = quantity,
         this.unit = unit;
 
+  StepIngredientModel.empty() {
+    this.id = IDModel.nil();
+    this.name = "";
+    this.plural = "";
+    this.quantity = 0;
+    this.unit = StepIngredientUnitModel.empty();
+  }
+
   StepIngredientModel copy() {
     return StepIngredientModel(id, name, plural, quantity, unit.copy());
   }
+
 
 
   bool equals(var other) {
@@ -63,6 +72,13 @@ class StepIngredientUnitModel {
     this.plural = plural;
     this.measurementType = measurementType;
     this.unitCategory = unitCategory;
+  }
+
+  StepIngredientUnitModel.empty() {
+    this.singular = "";
+    this.plural = "";
+    this.measurementType = "";
+    this.unitCategory = "";
   }
 
   StepIngredientUnitModel copy() {
