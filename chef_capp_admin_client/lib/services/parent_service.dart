@@ -1,6 +1,8 @@
-import 'package:chef_capp_admin_client/index.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import 'package:chef_capp_admin_client/index.dart';
+export 'package:chef_capp_admin_client/config.dart';
 
 // flutter run -d chrome --web-hostname=127.0.0.1 --web-port=8200
 
@@ -8,7 +10,7 @@ class ParentService {
   static AuthService _authService;
   static DatabaseService _databaseService;
 
-  static const String _baseUrl = 'http://ec2-3-17-181-130.us-east-2.compute.amazonaws.com';
+  static const String _baseUrl = API_URL;
 
   static AuthService get auth {
     if (_authService == null) {
